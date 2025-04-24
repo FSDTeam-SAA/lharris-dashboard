@@ -136,6 +136,7 @@ export function DashboardPage() {
   const [isScheduleVisitOpen, setIsScheduleVisitOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [searchTerm, setSearchTerm] = useState("");
+  console.log("Active Tab:", activeTab);
   const [stats, setStats] = useState([
     {
       id: 1,
@@ -184,9 +185,6 @@ export function DashboardPage() {
       try {
         // We'll use Promise.all to fetch multiple metrics in parallel
         const [
-          activePlansRes,
-          monthlyRevenueRes,
-          activeDiscountsRes,
           totalClientsRes,
           totalStaffRes,
           activeUsersRes,
