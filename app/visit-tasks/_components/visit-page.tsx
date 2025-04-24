@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/dialog";
 import { Pencil, Trash2, Eye } from "lucide-react";
 import { toast } from "sonner";
+import AddVisit from "./addVisit";
 
 // Dummy data
 const visits = [
@@ -242,96 +243,11 @@ export function VisitPage() {
       </div>
 
       {/* Add Visit Dialog */}
-      <Dialog open={isAddVisitOpen} onOpenChange={setIsAddVisitOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center">
-              <div className="bg-[#0a1172] text-white p-1 rounded-full mr-2">
-                <Eye className="h-5 w-5" />
-              </div>
-              Add New Visit
-            </DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <label htmlFor="client" className="text-sm font-medium">
-                Client
-              </label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Client" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="annette">Annette Black</SelectItem>
-                  <SelectItem value="kristin">Kristin Watson</SelectItem>
-                  <SelectItem value="jenny">Jenny Wilson</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid gap-2">
-              <label htmlFor="date" className="text-sm font-medium">
-                Date
-              </label>
-              <Input id="date" type="date" />
-            </div>
-            <div className="grid gap-2">
-              <label htmlFor="time" className="text-sm font-medium">
-                Time
-              </label>
-              <Input id="time" type="time" />
-            </div>
-            <div className="grid gap-2">
-              <label htmlFor="staff" className="text-sm font-medium">
-                Staff
-              </label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Staff" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="guy">Guy Hawkins</SelectItem>
-                  <SelectItem value="darlene">Darlene Robertson</SelectItem>
-                  <SelectItem value="esther">Esther Howard</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid gap-2">
-              <label htmlFor="visitType" className="text-sm font-medium">
-                Visit Type
-              </label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Visit Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="follow-up">Follow-up</SelectItem>
-                  <SelectItem value="routine">Routine Check</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="grid gap-2">
-              <label htmlFor="notes" className="text-sm font-medium">
-                Notes
-              </label>
-              <Input id="notes" placeholder="Add notes..." />
-            </div>
-          </div>
-          <DialogFooter className="sm:justify-between">
-            <DialogClose asChild>
-              <Button type="button" variant="outline">
-                Cancel
-              </Button>
-            </DialogClose>
-            <Button
-              type="button"
-              className="bg-[#0a1172] hover:bg-[#1a2182]"
-              onClick={handleAddVisit}
-            >
-              Save
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <AddVisit
+        open={isAddVisitOpen}
+        onOpenChange={setIsAddVisitOpen}
+        handleAddVisit={handleAddVisit}
+      />
 
       {/* View Visit Dialog */}
       <Dialog open={isViewVisitOpen} onOpenChange={setIsViewVisitOpen}>

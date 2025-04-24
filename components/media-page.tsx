@@ -53,6 +53,7 @@ export function MediaPage() {
   const [isViewMediaOpen, setIsViewMediaOpen] = useState(false)
   const [currentMedia, setCurrentMedia] = useState<MediaItem | null>(null)
   const [activeTab, setActiveTab] = useState("list")
+  console.log("activeTab", activeTab)
 
   const filteredMedia = mediaItems.filter((item) => {
     const matchesSearch =

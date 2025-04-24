@@ -1,5 +1,6 @@
-import { VisitPage } from "@/components/visit-page";
+
 import React from "react";
+import { VisitPage } from "./_components/visit-page";
 
 const page = () => {
   return (
