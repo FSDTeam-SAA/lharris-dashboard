@@ -254,6 +254,8 @@ export default function DashboardPage() {
     role: "client" as "client" | "admin" | "staff",
   })
   const [visitsData, setVisitsData] = useState<VisitResponse | null>(null)
+  console.log();
+  
   const [specificVisit, setSpecificVisit] = useState<SpecificVisitResponse | null>(null)
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
   const [selectedVisitId, setSelectedVisitId] = useState("")
@@ -444,13 +446,17 @@ export default function DashboardPage() {
     }
   }, [activeTab, token, currentUserPage, roleFilter, statusFilter, searchTerm, fetchUsers])
 
+
+  const [datas, setDatas] = useState<VisitResponse | null>(null)
+  console.log("Visit Data:", datas);
+  
   useEffect(() => {
     const fetchVisits = async () => {
       try {
         const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/visits/get-all-visit`
         const queryParams = new URLSearchParams({
           page: currentVisitPage.toString(),
-          limit: "10",
+          limit: "20",
         })
 
         if (visitStatusFilter !== "all") {
@@ -476,8 +482,11 @@ export default function DashboardPage() {
           throw new Error("Failed to fetch visits")
         }
 
-        const data: VisitResponse = await res.json()
-        setVisitsData(data)
+        const data = await res.json()
+        setDatas(data)
+        
+        
+        // setVisitsData(data)
         if (data.meta) {
           setTotalVisitPages(data.meta.totalPages)
           setCurrentVisitPage(data.meta.currentPage)
@@ -492,6 +501,7 @@ export default function DashboardPage() {
       fetchVisits()
     }
   }, [activeTab, currentVisitPage, visitStatusFilter, visitSearchTerm, token])
+  
 
   const handleStatusFilterChange = (newFilter: string) => {
     setVisitStatusFilter(newFilter)
