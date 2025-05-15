@@ -145,7 +145,7 @@ export function AddonServices() {
     const handleDeleteAddon = async () => {
         try {
             const response = await fetch(
-                `http://localhost:5001/api/v1/addsOnService/delete-addsOnService/${selectedAddonId}`,
+                `${process.env.NEXT_PUBLIC_API_URL}/addsOnService/delete-addsOnService/${selectedAddonId}`,
                 {
                     method: "DELETE",
                 },
@@ -161,9 +161,9 @@ export function AddonServices() {
             } else {
                 toast.error(result.message || "Failed to delete add-on service")
             }
-        } catch (error) {
-            // console.error("Error deleting addon service:", error)
-            toast.error(error as string || "Failed to delete add-on service")
+        } catch (error: any) { // Use 'any' or 'unknown' to access the 'message' property safely
+            console.error("Error deleting addon service:", error)
+            toast.error(error.message || "Failed to delete add-on service")
         }
     }
 
@@ -334,7 +334,7 @@ export function AddonServices() {
                                                 <SelectItem value="monthly">Monthly</SelectItem>
                                                 <SelectItem value="daily">Daily</SelectItem>
                                                 <SelectItem value="incident">Incident</SelectItem>
-                                                <SelectItem value="patrol">Patrol</SelectItem>
+                                                <SelectItem value="per-patrol">Per Patrol</SelectItem>
                                                 <SelectItem value="visit">Visit</SelectItem>
 
                                             </SelectContent>
@@ -450,7 +450,7 @@ export function AddonServices() {
                                                 <SelectItem value="monthly">Monthly</SelectItem>
                                                 <SelectItem value="daily">Daily </SelectItem>
                                                 <SelectItem value="incident">Incident</SelectItem>
-                                                <SelectItem value="patrol">Patrol</SelectItem>
+                                                <SelectItem value="per-patrol">Per Patrol</SelectItem>
                                                 <SelectItem value="visit">Visit</SelectItem>
 
                                             </SelectContent>

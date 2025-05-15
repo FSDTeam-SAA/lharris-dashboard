@@ -351,7 +351,7 @@ export function PricingPage() {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {plans.length > 0 ? (
                   plans.map((plan) => (
-                    <Card key={plan._id}>
+                    <Card key={plan._id} className="relative">
                       <CardHeader className="pb-2">
                         <CardTitle className="flex justify-between">
                           <span className="capitalize text-2xl">{plan.name}</span>
@@ -373,13 +373,13 @@ export function PricingPage() {
                           <h3>Features: </h3>
                         </div>
                         <div
-                          className="list-item list-none min-h-[100px]"
+                          className="list-item list-none pb-10"
                           dangerouslySetInnerHTML={{
                             __html: plan?.description || "Plan Description",
                           }}
                         />
                       </CardContent>
-                      <CardFooter className="flex items-center gap-2 text-base">
+                      <CardFooter className="flex items-center gap-2 text-base absolute bottom-0">
                         <Button
                           size="sm"
                           onClick={() => {
@@ -507,7 +507,7 @@ export function PricingPage() {
 
       {/* Add Package Dialog */}
       <Dialog open={isAddPackageOpen} onOpenChange={setIsAddPackageOpen}>
-        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll max-h-screen overflow-y-scroll">
+        <DialogContent className="sm:max-w-4xl max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <div className="bg-[#0a1172] text-white p-1 rounded-full mr-2">
