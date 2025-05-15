@@ -161,6 +161,7 @@ export function AddonServices() {
             } else {
                 toast.error(result.message || "Failed to delete add-on service")
             }
+            /* eslint-disable @typescript-eslint/no-explicit-any */
         } catch (error: any) { // Use 'any' or 'unknown' to access the 'message' property safely
             console.error("Error deleting addon service:", error)
             toast.error(error.message || "Failed to delete add-on service")
