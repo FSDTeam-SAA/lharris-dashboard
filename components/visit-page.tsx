@@ -208,20 +208,7 @@ export function VisitPage() {
       if (!visitsResponse.ok) throw new Error("Failed to fetch visits")
       const visitsData = await visitsResponse.json()
 
-      // Transform API data to component state
-      // setVisits(
-      //   visitsData.data.map((visit: any) => ({
-      //     id: visit._id,
-      //     clientName: visit.client?.fullname || "N/A",
-      //     clientEmail: visit.client?.email || "",
-      //     staffName: visit.staff?.fullname || "Staff not assigned",
-      //     date: visit.date,
-      //     type: visit.type || "N/A",
-      //     status: visit.status || "pending",
-      //     address: visit.address || "",
-      //     notes: visit.notes || "",
-      //   })),
-      // )
+     
 
       // Update filtered visits directly from API response
       setFilteredVisits(
@@ -305,20 +292,6 @@ export function VisitPage() {
           setStaffList(staffData)
         }
 
-        // Transform API data to component state
-        // setVisits(
-        //   visitsData.data.map((visit: any) => ({
-        //     id: visit._id,
-        //     clientName: visit.client?.fullname || "N/A",
-        //     clientEmail: visit.client?.email || "",
-        //     staffName: visit.staff?.fullname || "Staff not assigned",
-        //     date: visit.date,
-        //     type: visit.type || "N/A",
-        //     status: visit.status || "pending",
-        //     address: visit.address || "",
-        //     notes: visit.notes || "",
-        //   })),
-        // )
 
         // Update filtered visits directly from API response
         setFilteredVisits(
@@ -788,7 +761,12 @@ export function VisitPage() {
                   filteredVisits.map((visit) => (
                     <TableRow key={visit.id}>
                       <TableCell className="font-medium">{visit?.visitId}</TableCell>
-                      <TableCell>{visit.clientName}</TableCell>
+                      <TableCell>
+                        {visit.clientName}
+                        <div>
+                          <span className="text-xs text-gray-500">{visit.clientEmail}</span>
+                      </div>
+                      </TableCell>
                       <TableCell>{visit.staffName}</TableCell>
                       <TableCell>
                         {new Date(visit.date).toLocaleString("en-GB", {

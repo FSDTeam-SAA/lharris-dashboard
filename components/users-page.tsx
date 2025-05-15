@@ -19,7 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { Pencil, Trash2, Users, X } from "lucide-react"
+import { Pencil, Trash2, Users,  } from "lucide-react"
 import { toast } from "sonner"
 import { useSession } from "next-auth/react"
 
@@ -404,7 +404,7 @@ export function UsersPage() {
               </Select>
             </div>
             <Button onClick={() => setIsAddUserOpen(true)} className="bg-blue-950 hover:bg-blue-900">
-              + Add User
+              + Add User 
             </Button>
           </div>
 
@@ -553,14 +553,7 @@ export function UsersPage() {
               </div>
               Add User
             </DialogTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsAddUserOpen(false)}
-              className="absolute right-4 top-4"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+           
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">

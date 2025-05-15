@@ -1603,7 +1603,12 @@ export default function DashboardPage() {
                         <TableCell>{formatDate(visit.date)}</TableCell>
                         <TableCell>{extractTime(visit.date)}</TableCell>
                         <TableCell>{visit.address}</TableCell>
-                        <TableCell>{visit?.client?.fullname}</TableCell>
+                        <TableCell>
+                          {visit?.client?.fullname}
+                          <div>
+                          <span className="text-xs text-gray-500">{visit?.client?.email}</span>
+                          </div>
+                        </TableCell>
                         <TableCell>{visit.staff?.fullname || "Not Assigned"}</TableCell>
                         <TableCell>
                           <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(visit.status)}`}>

@@ -70,7 +70,7 @@ export function LoginForm() {
   return (
     <div className="flex min-h-screen overflow-hidden">
       {/* Left section */}
-      <div className="hidden lg:flex w-1/2 bg-[#0a1155] text-white p-12 flex-col justify-between relative ">
+      <div className="hidden lg:flex w-1/2 bg-[#0a1155] text-white p-12 flex-col justify-between relative overflow-y-hidden">
         <div className="border-[7px] border-[#212767] w-[592px] h-[455px] rounded-[400px] absolute lg:-top-[200px] xl:-bottom-[300px] -left-[500px] rotate-[-45deg]"></div>
         <div>
           <Link href="/">
@@ -93,7 +93,7 @@ export function LoginForm() {
       </div>
 
       {/* Right section */}
-      <div className="flex flex-col justify-center w-full lg:w-1/2 px-8 py-12 sm:px-16">
+      <div className="flex flex-col justify-center w-full lg:w-1/2 px-8 py-12 sm:px-16 z-20 ">
         <div className="w-full mx-auto space-y-6">
           <h2 className="text-4xl md:text-6xl font-[600] text-gray-900 text-center">
             Welcome User
