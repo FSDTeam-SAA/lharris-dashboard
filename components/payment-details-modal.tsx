@@ -15,7 +15,7 @@ export function PaymentDetailsModal({ isOpen, onClose, payment }: PaymentDetails
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
                 <DialogHeader>
                     <DialogTitle>Payment Details</DialogTitle>
                 </DialogHeader>

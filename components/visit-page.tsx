@@ -878,7 +878,7 @@ export function VisitPage() {
 
       {/* Add Visit Dialog */}
       <Dialog open={isAddVisitOpen} onOpenChange={setIsAddVisitOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <div className="bg-[#0a1172] text-white p-1 rounded-full mr-2">
@@ -1029,7 +1029,7 @@ export function VisitPage() {
 
       {/* View Visit Dialog */}
       <Dialog open={isViewVisitOpen} onOpenChange={setIsViewVisitOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <div className="bg-[#0a1172] text-white p-1 rounded-full mr-2">
@@ -1098,7 +1098,7 @@ export function VisitPage() {
 
       {/* Edit Visit Dialog */}
       <Dialog open={isEditVisitOpen} onOpenChange={setIsEditVisitOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <div className="bg-[#0a1172] text-white p-1 rounded-full mr-2">
@@ -1265,7 +1265,7 @@ export function VisitPage() {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <div className="bg-[#0a1172] text-white p-1 rounded-full mr-2">
@@ -1304,7 +1304,7 @@ export function VisitPage() {
 
       {/* Status Update Dialog */}
       <Dialog open={isStatusModalOpen} onOpenChange={setIsStatusModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle>Update Visit Status</DialogTitle>
           </DialogHeader>
@@ -1365,7 +1365,7 @@ export function VisitPage() {
 
       {/* Assign Staff Dialog */}
       <Dialog open={isAssignStaffOpen} onOpenChange={setIsAssignStaffOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <div className="bg-[#0a1172] text-white p-1 rounded-full mr-2">

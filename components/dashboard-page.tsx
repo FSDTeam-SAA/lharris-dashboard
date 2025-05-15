@@ -1695,7 +1695,7 @@ export default function DashboardPage() {
 
       {/* Delete User Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
             <DialogDescription>
@@ -1715,7 +1715,7 @@ export default function DashboardPage() {
 
       {/* Edit User Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle>Edit User</DialogTitle>
             <DialogDescription>Update user information</DialogDescription>
@@ -1921,7 +1921,7 @@ export default function DashboardPage() {
 
       {/* Delete Visit Confirmation Dialog */}
       <Dialog open={isDeleteVisitDialogOpen} onOpenChange={setIsDeleteVisitDialogOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle>Confirm Visit Deletion</DialogTitle>
             <DialogDescription>
@@ -1941,7 +1941,7 @@ export default function DashboardPage() {
 
       {/* Edit Visit Dialog */}
       <Dialog open={isEditVisitDialogOpen} onOpenChange={setIsEditVisitDialogOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle>Edit Visit</DialogTitle>
             <DialogDescription>Update visit information</DialogDescription>
@@ -2008,7 +2008,7 @@ export default function DashboardPage() {
 
       {/* --- START IMPLEMENTATION: Status Update Dialog --- */}
       <Dialog open={isStatusModalOpen} onOpenChange={setIsStatusModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle>Update Visit Status</DialogTitle>
             <DialogDescription>Update the status and add notes for this visit</DialogDescription>

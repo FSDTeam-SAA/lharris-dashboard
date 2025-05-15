@@ -545,7 +545,7 @@ export function UsersPage() {
 
       {/* Add User Dialog */}
       <Dialog open={isAddUserOpen} onOpenChange={setIsAddUserOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader className="flex items-center justify-between">
             <DialogTitle className="flex items-center">
               <div className="bg-blue-950 text-white p-1 rounded-full mr-2">
@@ -619,7 +619,7 @@ export function UsersPage() {
 
       {/* Edit User Dialog */}
       <Dialog open={isEditUserOpen} onOpenChange={setIsEditUserOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <div className="bg-blue-950 text-white p-1 rounded-full mr-2">

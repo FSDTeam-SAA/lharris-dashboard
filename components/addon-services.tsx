@@ -17,21 +17,23 @@ interface AddonService {
     _id: string
     name?: string
     addOn?: string
-    price: number
+    flexiblePrice: number
+    tieredPrice: number
     pack?: string
     description?: string
     startDate?: string | null
     endDate?: string | null
-    planId?: string 
+    planId?: string
     updatedAt: string
     __v: number
 }
 
 const formSchema = z.object({
+    flexiblePrice: z.number({ message: "Please enter a number" }),
+    tieredPrice: z.number({ message: "Please enter a number" }),
     name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-    price: z.number().min(0, { message: "Price must be a positive number." }),
     description: z.string().min(10, { message: "Description must be at least 10 characters." }),
-    pack: z.enum(["weekly", "monthly", "daily", "patrol", "incident", "visit"]),
+    pack: z.enum(["weekly", "monthly", "daily", "per-patrol", "incident", "visit"]),
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -49,9 +51,10 @@ export function AddonServices() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            price: 0,
+            flexiblePrice: 0,
+            tieredPrice: 0,
             description: "",
-            pack: "daily",
+            pack: "per-patrol",
         },
     })
 
@@ -78,6 +81,8 @@ export function AddonServices() {
     useEffect(() => {
         fetchAddonServices()
     }, [])
+
+
 
     // Add new addon service
     const handleAddAddon = async (data: FormData) => {
@@ -167,19 +172,21 @@ export function AddonServices() {
         setEditingAddon(addon)
         form.reset({
             name: addon.name || "",
-            price: addon.price,
+            flexiblePrice: addon.flexiblePrice,
+            tieredPrice: addon.tieredPrice,
             description: addon.description || "",
-            pack: (addon.pack as "weekly" | "monthly" | "daily") || "daily",
+            pack: (addon.pack as "weekly" | "monthly" | "daily" | "per-patrol" | "incident" | "visit") || "per-patrol",
         })
         setIsEditAddonOpen(true)
     }
+
 
     return (
         <div className="w-full bg-white shadow-md mt-10 rounded p-6">
             <div className="flex justify-between items-center mb-6">
                 <h3 className="text-lg font-semibold text-[#18181B]">Add-on Services</h3>
                 <Button className="bg-[#0a1172] hover:bg-[#1a2182]" onClick={() => setIsAddAddonOpen(true)}>
-                    <Plus className="h-4 w-4 mr-2" /> Add-on Service
+                    <Plus className="h-4 w-4 mr-2" /> Add Add-on Service
                 </Button>
             </div>
 
@@ -193,10 +200,18 @@ export function AddonServices() {
                         <Card key={addon._id}>
                             <CardHeader className="pb-2">
                                 <CardTitle className="flex justify-between">
-                                    <span className="capitalize text-2xl pb-7">{addon.name || addon.addOn || "Add-on Service"}</span>
+                                    <span className="capitalize text-2xl py-2">{addon.name || addon.addOn || "Add-on Service"}</span>
                                 </CardTitle>
-                                <CardDescription className="text-lg font-semibold text-[#000000] capitalize">
-                                    ${addon.price} / {addon.pack || "service"}
+                                <CardDescription className="text-sm py-2 font-medium text-[#000000] capitalize">
+                                    <div className="flex justify-between">
+                                        <div className="">
+                                            <p> Flexible Price: ${addon.flexiblePrice}</p>
+                                            <p> Tiered Price: ${addon.tieredPrice}</p>
+                                        </div>
+                                        <div className="">
+                                            Pack: {addon.pack}
+                                        </div>
+                                    </div>
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="pb-2">
@@ -229,7 +244,7 @@ export function AddonServices() {
 
             {/* Add Addon Dialog */}
             <Dialog open={isAddAddonOpen} onOpenChange={setIsAddAddonOpen}>
-                <DialogContent className="sm:max-w-md">
+                <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
                     <DialogHeader>
                         <DialogTitle className="flex items-center">
                             <div className="bg-[#0a1172] text-white p-1 rounded-full mr-2">
@@ -255,10 +270,28 @@ export function AddonServices() {
                             />
                             <FormField
                                 control={form.control}
-                                name="price"
+                                name="flexiblePrice"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Price</FormLabel>
+                                        <FormLabel>Flexible Price</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                placeholder="0.00"
+                                                {...field}
+                                                onChange={(e) => field.onChange(Number.parseFloat(e.target.value))}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="tieredPrice"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Tiered Price</FormLabel>
                                         <FormControl>
                                             <Input
                                                 type="number"
@@ -327,7 +360,7 @@ export function AddonServices() {
 
             {/* Edit Addon Dialog */}
             <Dialog open={isEditAddonOpen} onOpenChange={setIsEditAddonOpen}>
-                <DialogContent className="sm:max-w-md">
+                <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
                     <DialogHeader>
                         <DialogTitle className="flex items-center">
                             <div className="bg-[#0a1172] text-white p-1 rounded-full mr-2">
@@ -353,10 +386,28 @@ export function AddonServices() {
                             />
                             <FormField
                                 control={form.control}
-                                name="price"
+                                name="flexiblePrice"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Price</FormLabel>
+                                        <FormLabel>Flexible Price</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                placeholder="0.00"
+                                                {...field}
+                                                onChange={(e) => field.onChange(Number.parseFloat(e.target.value))}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="tieredPrice"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Tiered Price</FormLabel>
                                         <FormControl>
                                             <Input
                                                 type="number"
@@ -425,7 +476,7 @@ export function AddonServices() {
 
             {/* Delete Addon Dialog */}
             <Dialog open={isDeleteAddonOpen} onOpenChange={setIsDeleteAddonOpen}>
-                <DialogContent className="sm:max-w-md">
+                <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
                     <DialogHeader>
                         <DialogTitle className="flex items-center">
                             <div className="bg-[#0a1172] mb-5 text-white p-1 rounded-full mr-2">

@@ -36,9 +36,11 @@ import { AddonServices } from "./addon-services"
 interface Plan {
   _id: string
   name: string
+  subTitle: string
   price: number
   description: string
   pack?: string
+  type: string
   addsOnServices?: Array<{
     text: string
     _id: string
@@ -78,9 +80,11 @@ interface Payments {
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Plan name must be at least 2 characters." }),
+  subTitle: z.string().min(2, { message: "Subtitle must be at least 2 characters." }),
   price: z.number().min(0, { message: "Price must be a positive number." }),
   description: z.string().min(10, { message: "Description must be at least 10 characters." }),
-  pack: z.enum(["weekly", "monthly", "daily"]),
+  pack: z.enum(["weekly", "monthly", "daily", "per-patrol"]),
+  type: z.enum(["flexible", "tiered"])
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -152,9 +156,11 @@ export function PricingPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      subTitle: "",
       price: 0,
       description: "",
-      pack: "daily",
+      pack: "per-patrol",
+      type: "flexible"
     },
   })
 
@@ -179,7 +185,7 @@ export function PricingPage() {
         }
       } catch (error) {
         // console.error("Error fetching billing metrics:", error)
-        toast.error( error as string || "Failed to load billing metrics")
+        toast.error(error as string || "Failed to load billing metrics")
       }
     }
     if (token) {
@@ -200,7 +206,7 @@ export function PricingPage() {
       form.reset()
     } catch (error) {
       // console.error("Error adding plan:", error)
-      toast.error( error as string || "Failed to add package")
+      toast.error(error as string || "Failed to add package")
     }
   }
 
@@ -213,7 +219,7 @@ export function PricingPage() {
       setSelectedPlanId("")
     } catch (error) {
       // console.error("Error deleting plan:", error)
-      toast.error( error as string || "Failed to delete plan")
+      toast.error(error as string || "Failed to delete plan")
     }
   }
 
@@ -248,9 +254,11 @@ export function PricingPage() {
     setEditingPlan(plan)
     form.reset({
       name: plan.name,
+      subTitle: plan.subTitle,
       price: plan.price,
       description: plan.description,
       pack: plan.pack as "weekly" | "monthly" | "daily",
+      type: plan.type as "flexible" | "tiered"
     })
     setIsEditPackageOpen(true)
   }
@@ -276,6 +284,8 @@ export function PricingPage() {
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
   }
+
+  console.log(plans)
 
   return (
     <div className="flex flex-col h-full">
@@ -344,10 +354,18 @@ export function PricingPage() {
                     <Card key={plan._id}>
                       <CardHeader className="pb-2">
                         <CardTitle className="flex justify-between">
-                          <span className="capitalize text-2xl pb-7">{plan.name}</span>
+                          <span className="capitalize text-2xl">{plan.name}</span>
                         </CardTitle>
-                        <CardDescription className="text-lg font-semibold text-[#000000] capitalize">
-                          ${plan.price} / {plan.pack}
+                        <CardDescription className="text-lg font-medium text-[#000000] capitalize">
+                          <p className="py-4">{plan.subTitle}</p>
+                          <div className="flex justify-between items-center text-base">
+                            <div className="">
+                              ${plan.price} / {plan.pack}
+                            </div>
+                            <div className="t">
+                              Type: {plan.type}
+                            </div>
+                          </div>
                         </CardDescription>
                       </CardHeader>
                       <CardContent className="pb-2">
@@ -355,7 +373,7 @@ export function PricingPage() {
                           <h3>Features: </h3>
                         </div>
                         <div
-                          className="list-item list-none h-[200px]"
+                          className="list-item list-none min-h-[100px]"
                           dangerouslySetInnerHTML={{
                             __html: plan?.description || "Plan Description",
                           }}
@@ -408,7 +426,7 @@ export function PricingPage() {
                           <TableHead className="w-[50px] pl-10">Transaction ID</TableHead>
                           <TableHead className="text-center">Date</TableHead>
                           <TableHead className="text-center">Visit Time</TableHead>
-                         
+
                           <TableHead className="text-center">Plan</TableHead>
                           <TableHead className="text-center">Status</TableHead>
                           <TableHead className="text-center">Actions</TableHead>
@@ -432,7 +450,7 @@ export function PricingPage() {
                                 hour12: true,
                               })}
                             </TableCell>
-                           
+
                             <TableCell className="capitalize">{item?.plan?.name || "N/A"}</TableCell>
                             <TableCell className="max-w-[200px]">
                               <span
@@ -486,9 +504,10 @@ export function PricingPage() {
         <AddonServices />
       </div>
 
+
       {/* Add Package Dialog */}
       <Dialog open={isAddPackageOpen} onOpenChange={setIsAddPackageOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <div className="bg-[#0a1172] text-white p-1 rounded-full mr-2">
@@ -514,6 +533,19 @@ export function PricingPage() {
               />
               <FormField
                 control={form.control}
+                name="subTitle"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Package Subtitle</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter package subtitle" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="price"
                 render={({ field }) => (
                   <FormItem>
@@ -561,6 +593,28 @@ export function PricingPage() {
                         <SelectItem value="weekly">Weekly</SelectItem>
                         <SelectItem value="monthly">Monthly</SelectItem>
                         <SelectItem value="daily">Daily</SelectItem>
+                        <SelectItem value="per-patrol">Per Patrol</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Type</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a billing period" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="flexible">Flexible</SelectItem>
+                        <SelectItem value="tiered">Tiered</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -584,7 +638,7 @@ export function PricingPage() {
 
       {/* Edit Package Dialog */}
       <Dialog open={isEditPackageOpen} onOpenChange={setIsEditPackageOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <div className="bg-[#0a1172] text-white p-1 rounded-full mr-2">
@@ -610,6 +664,19 @@ export function PricingPage() {
               />
               <FormField
                 control={form.control}
+                name="subTitle"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Package Subtitle</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter package subtitle" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="price"
                 render={({ field }) => (
                   <FormItem>
@@ -657,6 +724,28 @@ export function PricingPage() {
                         <SelectItem value="weekly">Weekly</SelectItem>
                         <SelectItem value="monthly">Monthly</SelectItem>
                         <SelectItem value="daily">Daily</SelectItem>
+                        <SelectItem value="per-patrol">Per Patrol</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Type</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a billing period" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="flexible">Flexible</SelectItem>
+                        <SelectItem value="tiered">Tiered</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -680,7 +769,7 @@ export function PricingPage() {
 
       {/* Delete Package Dialog */}
       <Dialog open={isDeletePackageOpen} onOpenChange={setIsDeletePackageOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <div className="bg-[#0a1172] mb-5 text-white p-1 rounded-full mr-2">

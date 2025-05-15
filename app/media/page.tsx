@@ -305,7 +305,7 @@ export default function MediaPage() {
         />
       )}
       <Dialog open={isDeleteMediaOpen} onOpenChange={setIsDeleteMediaOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <div className="bg-[#0a1172] mb-5 text-white p-1 rounded-full mr-2">
