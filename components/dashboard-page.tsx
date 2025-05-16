@@ -242,6 +242,8 @@ export default function DashboardPage() {
     confirmVisits: 0,
     inProgress: 0,
   })
+  console.log("Metrics:", metrics);
+  
   const [isLoading, setIsLoading] = useState(true)
   // const [error, setError] = useState<string | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -336,13 +338,13 @@ export default function DashboardPage() {
 
         // Update metrics with data from API
         setMetrics({
-          activeUsers: data?.data?.activeUsersCount || 128,
-          totalVisits: data?.data?.totalVisits || 342,
+          activeUsers: data?.data?.activeUsersCount ,
+          totalVisits: data?.data?.totalVisits ,
           pendingVisits: data?.data?.pendingVisits ?? 12,
-          totalSecurityStaff: data?.data?.totalStaffMembers || 342,
-          totalAdmin: data?.data?.totalAdmins || 28,
-          confirmVisits: data?.data?.confirmVisits || 128,
-          inProgress: data?.data?.inProgress || 9,
+          totalSecurityStaff: data?.data?.totalStaffMembers ,
+          totalAdmin: data?.data?.totalAdmins,
+          confirmVisits: data?.data?.confirmVisits,
+          inProgress: data?.data?.inProgress,
         })
         // setError(null)
       } catch (err) {
@@ -1695,7 +1697,7 @@ export default function DashboardPage() {
 
       {/* Delete User Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
             <DialogDescription>
@@ -1715,7 +1717,7 @@ export default function DashboardPage() {
 
       {/* Edit User Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Edit User</DialogTitle>
             <DialogDescription>Update user information</DialogDescription>
@@ -1921,7 +1923,7 @@ export default function DashboardPage() {
 
       {/* Delete Visit Confirmation Dialog */}
       <Dialog open={isDeleteVisitDialogOpen} onOpenChange={setIsDeleteVisitDialogOpen}>
-        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Confirm Visit Deletion</DialogTitle>
             <DialogDescription>
@@ -1941,7 +1943,7 @@ export default function DashboardPage() {
 
       {/* Edit Visit Dialog */}
       <Dialog open={isEditVisitDialogOpen} onOpenChange={setIsEditVisitDialogOpen}>
-        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Edit Visit</DialogTitle>
             <DialogDescription>Update visit information</DialogDescription>
@@ -2008,7 +2010,7 @@ export default function DashboardPage() {
 
       {/* --- START IMPLEMENTATION: Status Update Dialog --- */}
       <Dialog open={isStatusModalOpen} onOpenChange={setIsStatusModalOpen}>
-        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Update Visit Status</DialogTitle>
             <DialogDescription>Update the status and add notes for this visit</DialogDescription>
