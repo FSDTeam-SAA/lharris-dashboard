@@ -70,7 +70,7 @@ export function LoginForm() {
   return (
     <div className="flex min-h-screen overflow-hidden">
       {/* Left section */}
-      <div className="hidden lg:flex w-1/2 bg-[#0a1155] text-white p-12 flex-col justify-between relative overflow-y-hidden">
+      <div className="hidden lg:flex w-1/2 bg-[#0a1155] text-white p-12 flex-col justify-between relative overflow-hidden">
         <div className="border-[7px] border-[#212767] w-[592px] h-[455px] rounded-[400px] absolute lg:-top-[200px] xl:-bottom-[300px] -left-[500px] rotate-[-45deg]"></div>
         <div>
           <Link href="/">
