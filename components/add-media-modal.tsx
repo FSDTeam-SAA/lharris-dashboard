@@ -1,44 +1,27 @@
-"use client";
+"use client"
 
-import type React from "react";
+import type React from "react"
 
-import { useState, useRef } from "react";
-import { Upload, FileUp } from "lucide-react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { useState, useRef } from "react"
+import { Upload, FileUp } from "lucide-react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
 
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useSession } from "next-auth/react";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { useSession } from "next-auth/react"
+import { toast } from "sonner"
 
 interface AddMediaModalProps {
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  medias: any;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  medias: any
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
 const formSchema = z.object({
@@ -48,19 +31,15 @@ const formSchema = z.object({
   type: z.string().min(1, "Type is required"),
   notes: z.string().optional(),
   issueDate: z.string().min(1, "Issue date is required"),
-});
+})
 
-export function AddMediaModal({
-  open,
-  onOpenChange,
-  medias,
-}: AddMediaModalProps) {
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export function AddMediaModal({ open, onOpenChange, medias }: AddMediaModalProps) {
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [videoFile, setVideoFile] = useState<File | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const imageInputRef = useRef<HTMLInputElement>(null);
-  const videoInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null)
+  const videoInputRef = useRef<HTMLInputElement>(null)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -72,71 +51,70 @@ export function AddMediaModal({
       notes: "",
       issueDate: "",
     },
-  });
+  })
 
-  const session = useSession();
+  const session = useSession()
 
-  const TOKEN = session.data?.accessToken;
+  const TOKEN = session.data?.accessToken
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
+      setImageFile(e.target.files[0])
     }
-  };
+  }
 
   const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setVideoFile(e.target.files[0]);
+      setVideoFile(e.target.files[0])
     }
-  };
+  }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsSubmitting(true);
+    setIsSubmitting(true)
     try {
-      const formData = new FormData();
+      const formData = new FormData()
       // Add text fields
-      formData.append("email", values.email);
-      formData.append("place", values.place);
-      formData.append("issue", values.issue);
-      formData.append("type", values.type);
-      formData.append("notes", values.notes || "");
-      formData.append("issueDate", values.issueDate);
+      formData.append("email", values.email)
+      formData.append("place", values.place)
+      formData.append("issue", values.issue)
+      formData.append("type", values.type)
+      formData.append("notes", values.notes || "")
+      formData.append("issueDate", values.issueDate)
 
       // Add files if selected
       if (imageFile) {
-        formData.append("image", imageFile);
+        formData.append("image", imageFile)
       }
 
       if (videoFile) {
-        formData.append("video", videoFile);
+        formData.append("video", videoFile)
       }
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/visits/issues/update-add-issue`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${TOKEN}`,
-          },
-          body: formData,
-        }
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/visits/issues/update-add-issue`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+        body: formData,
+      })
 
       if (response.ok) {
-        onOpenChange(false);
-        form.reset();
-        setImageFile(null);
-        setVideoFile(null);
+        onOpenChange(false)
+        form.reset()
+        setImageFile(null)
+        setVideoFile(null)
+        toast.success("Media added successfully")
+        window.location.reload()
       } else {
-        // console.error("Failed to submit form");
+        const errorData = await response.json().catch(() => ({}))
+        toast.error(errorData.message || "Failed to add media")
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error submitting form:", error)
     } finally {
-      setIsSubmitting(false);
-      toast.success("Media added successfully");
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -146,30 +124,20 @@ export function AddMediaModal({
             <div className="bg-[#0a1172] rounded-full p-2 flex items-center justify-center">
               <Upload className="text-white h-5 w-5" />
             </div>
-            <DialogTitle className="text-xl font-bold text-[#0a1172]">
-              Add Media
-            </DialogTitle>
+            <DialogTitle className="text-xl font-bold text-[#0a1172]">Add Media</DialogTitle>
           </div>
         </DialogHeader>
 
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 p-6 pt-2"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-6 pt-2">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2">
-                  <FormLabel className="text-gray-700 sm:col-span-1">
-                    Client Email :
-                  </FormLabel>
+                  <FormLabel className="text-gray-700 sm:col-span-1">Client Email :</FormLabel>
                   <div className="sm:col-span-3">
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={(value) => field.onChange(value)} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select Client" />
@@ -178,8 +146,8 @@ export function AddMediaModal({
                       <SelectContent>
                         {
                           /* eslint-disable @typescript-eslint/no-explicit-any */
-                          medias?.map((user: any, index: number) => (
-                            <SelectItem key={index} value={user?.client?.email}>
+                          medias?.map((user: any) => (
+                            <SelectItem key={user?.client?._id} value={user?.client?.email}>
                               {user?.client?.email}
                             </SelectItem>
                           ))
@@ -196,9 +164,7 @@ export function AddMediaModal({
               name="issueDate"
               render={({ field }) => (
                 <FormItem className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2">
-                  <FormLabel className="text-gray-700 sm:col-span-1">
-                    Issue Date :
-                  </FormLabel>
+                  <FormLabel className="text-gray-700 sm:col-span-1">Issue Date :</FormLabel>
                   <div className="sm:col-span-3">
                     <FormControl>
                       <Input type="date" {...field} />
@@ -213,9 +179,7 @@ export function AddMediaModal({
               name="place"
               render={({ field }) => (
                 <FormItem className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2">
-                  <FormLabel className="text-gray-700 sm:col-span-1">
-                    Address :
-                  </FormLabel>
+                  <FormLabel className="text-gray-700 sm:col-span-1">Address :</FormLabel>
                   <div className="sm:col-span-3">
                     <FormControl>
                       <Input placeholder="Address" {...field} />
@@ -230,11 +194,9 @@ export function AddMediaModal({
               name="issue"
               render={({ field }) => (
                 <FormItem className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2">
-                  <FormLabel className="text-gray-700 sm:col-span-1">
-                    Issue Founded :
-                  </FormLabel>
+                  <FormLabel className="text-gray-700 sm:col-span-1">Issue Founded :</FormLabel>
                   <div className="sm:col-span-3">
-                    <Select onValueChange={field.onChange}>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select" />
@@ -255,23 +217,16 @@ export function AddMediaModal({
               name="type"
               render={({ field }) => (
                 <FormItem className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2">
-                  <FormLabel className="text-gray-700 sm:col-span-1">
-                    Type :
-                  </FormLabel>
+                  <FormLabel className="text-gray-700 sm:col-span-1">Type :</FormLabel>
                   <div className="sm:col-span-3">
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select Type" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="routine check">
-                          Routine check
-                        </SelectItem>
+                        <SelectItem value="routine check">Routine check</SelectItem>
                         <SelectItem value="emergency">Emergency</SelectItem>
                         <SelectItem value="follow up">Follow up</SelectItem>
                       </SelectContent>
@@ -286,16 +241,10 @@ export function AddMediaModal({
               name="notes"
               render={({ field }) => (
                 <FormItem className="grid grid-cols-1 sm:grid-cols-4 items-center gap-2">
-                  <FormLabel className="text-gray-700 sm:col-span-1">
-                    Notes :
-                  </FormLabel>
+                  <FormLabel className="text-gray-700 sm:col-span-1">Notes :</FormLabel>
                   <div className="sm:col-span-3">
                     <FormControl>
-                      <Textarea
-                        placeholder="Enter notes here..."
-                        {...field}
-                        className="min-h-[80px]"
-                      />
+                      <Textarea placeholder="Enter notes here..." {...field} className="min-h-[80px]" />
                     </FormControl>
                   </div>
                 </FormItem>
@@ -318,9 +267,7 @@ export function AddMediaModal({
                   className="w-full justify-between"
                   onClick={() => imageInputRef.current?.click()}
                 >
-                  <span className="truncate">
-                    {imageFile ? imageFile.name : "Choose File"}
-                  </span>
+                  <span className="truncate">{imageFile ? imageFile.name : "Choose File"}</span>
                   <FileUp className="h-4 w-4 ml-2" />
                 </Button>
               </div>
@@ -342,27 +289,36 @@ export function AddMediaModal({
                   className="w-full justify-between"
                   onClick={() => videoInputRef.current?.click()}
                 >
-                  <span className="truncate">
-                    {videoFile ? videoFile.name : "Choose File"}
-                  </span>
+                  <span className="truncate">{videoFile ? videoFile.name : "Choose File"}</span>
                   <FileUp className="h-4 w-4 ml-2" />
                 </Button>
               </div>
             </div>
 
+            {imageFile && (
+              <p className="text-xs text-green-600 mt-1">
+                Image selected: {imageFile.name} ({(imageFile.size / 1024).toFixed(1)} KB)
+              </p>
+            )}
+
+            {videoFile && (
+              <p className="text-xs text-green-600 mt-1">
+                Video selected: {videoFile.name} ({(videoFile.size / (1024 * 1024)).toFixed(2)} MB)
+              </p>
+            )}
+
             <div className="flex justify-end gap-3 mt-6 pt-2">
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-[#0a1172] hover:bg-[#1a2182]"
-              >
-                {isSubmitting ? "Saving..." : "Save"}
+              <Button type="submit" disabled={isSubmitting} className="bg-[#0a1172] hover:bg-[#1a2182]">
+                {isSubmitting ? (
+                  <span className="flex items-center gap-2">
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                    Saving...
+                  </span>
+                ) : (
+                  "Save"
+                )}
               </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => onOpenChange(false)}
-              >
+              <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
                 Cancel
               </Button>
             </div>
@@ -370,5 +326,5 @@ export function AddMediaModal({
         </Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
