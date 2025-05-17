@@ -373,7 +373,7 @@ export function PricingPage() {
                           <h3>Features: </h3>
                         </div>
                         <div
-                          className="list-item list-none pb-10 min-h-[100px]"
+                          className="list-item list-none pb-10 h-[200px] "
                           dangerouslySetInnerHTML={{
                             __html: plan?.description || "Plan Description",
                           }}
