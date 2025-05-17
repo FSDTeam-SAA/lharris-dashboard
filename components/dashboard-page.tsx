@@ -451,13 +451,14 @@ export default function DashboardPage() {
   const [datas, setDatas] = useState<VisitResponse | null>(null)
   console.log("Visit Data:", datas)
 
+  // Update the useEffect for fetching visits to properly handle pagination
   useEffect(() => {
     const fetchVisits = async () => {
       try {
         const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/visits/get-all-visit`
         const queryParams = new URLSearchParams({
           page: currentVisitPage.toString(),
-          limit: "20",
+          limit: visitsPerPage.toString(),
         })
 
         if (visitStatusFilter !== "all") {
@@ -485,7 +486,7 @@ export default function DashboardPage() {
 
         const data = await res.json()
         setDatas(data)
-        setVisitsData(data) // Add this line to update visitsData state as well
+        setVisitsData(data)
 
         if (data.meta) {
           setTotalVisitPages(data.meta.totalPages)
@@ -500,7 +501,7 @@ export default function DashboardPage() {
     if (activeTab === "visits") {
       fetchVisits()
     }
-  }, [activeTab, currentVisitPage, visitStatusFilter, visitSearchTerm, token])
+  }, [activeTab, currentVisitPage, visitStatusFilter, visitSearchTerm, token, visitsPerPage])
 
   const handleStatusFilterChange = (newFilter: string) => {
     setVisitStatusFilter(newFilter)
@@ -549,12 +550,8 @@ export default function DashboardPage() {
       if (activeTab === "overview") {
         setIsOverviewVisitsLoading(true)
         try {
-          // Build query parameters including filters
-          const queryParams = new URLSearchParams({
-            limit: "10",
-          })
+          const queryParams = new URLSearchParams({ limit: "10" })
 
-          // Add status filter if not "all"
           if (overviewVisitStatusFilter !== "all") {
             queryParams.append("status", overviewVisitStatusFilter)
           }
@@ -584,6 +581,9 @@ export default function DashboardPage() {
     }
 
     fetchVisitsForOverview()
+    const interval = setInterval(fetchVisitsForOverview, 10000) // Every 10s
+
+    return () => clearInterval(interval)
   }, [activeTab, token, overviewVisitStatusFilter])
 
   // Get status class for styling
@@ -741,7 +741,7 @@ export default function DashboardPage() {
     setIsEditVisitDialogOpen(true)
   }
 
-  // Handle edit visit form submission
+  // Update the handleEditVisitSubmit function to refresh data with pagination
   const handleEditVisitSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
@@ -758,9 +758,10 @@ export default function DashboardPage() {
         throw new Error("Failed to update visit")
       }
 
-      // Refresh visits data after update
+      // Immediately refresh visits data after update
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/visits/get-all-visit?page=${currentVisitPage}&limit=${visitsPerPage}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/visits/get-all-visit?page=${currentVisitPage}&limit=${visitsPerPage}${visitStatusFilter !== "all" ? `&status=${visitStatusFilter}` : ""
+        }${visitSearchTerm ? `&search=${visitSearchTerm}` : ""}`,
         {
           method: "GET",
           headers: {
@@ -773,11 +774,11 @@ export default function DashboardPage() {
       if (res.ok) {
         const data = await res.json()
         setVisitsData(data)
+        setDatas(data)
       }
 
       toast.success("Visit updated successfully")
     } catch (error) {
-      // console.error("Error updating visit:", error)
       toast.error(error instanceof Error ? error.message : String(error))
     } finally {
       setIsEditVisitDialogOpen(false)
@@ -814,9 +815,10 @@ export default function DashboardPage() {
         throw new Error("Failed to update status")
       }
 
-      // Refresh visits data after update
+      // Immediately refresh visits data after update
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/visits/get-all-visit?page=${currentVisitPage}&limit=${visitsPerPage}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/visits/get-all-visit?page=${currentVisitPage}&limit=${visitsPerPage}${visitStatusFilter !== "all" ? `&status=${visitStatusFilter}` : ""
+        }${visitSearchTerm ? `&search=${visitSearchTerm}` : ""}`,
         {
           method: "GET",
           headers: {
@@ -829,6 +831,7 @@ export default function DashboardPage() {
       if (res.ok) {
         const data = await res.json()
         setVisitsData(data)
+        setDatas(data)
       }
 
       toast.success("Status updated successfully")
@@ -976,6 +979,66 @@ export default function DashboardPage() {
 
     fetchNotifications()
   }, [token])
+
+  // Add real-time polling for visits data
+  useEffect(() => {
+    // Only set up polling when on the visits tab
+    if (activeTab !== "visits") return
+
+    // Initial fetch
+    const fetchVisitsData = async () => {
+      try {
+        const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/visits/get-all-visit`
+        const queryParams = new URLSearchParams({
+          page: currentVisitPage.toString(),
+          limit: visitsPerPage.toString(),
+        })
+
+        if (visitStatusFilter !== "all") {
+          queryParams.append("status", visitStatusFilter)
+        }
+
+        if (visitSearchTerm.trim()) {
+          queryParams.append("search", visitSearchTerm.trim())
+        }
+
+        const apiUrl = `${baseUrl}?${queryParams.toString()}`
+
+        const res = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        })
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch visits")
+        }
+
+        const data = await res.json()
+
+        // Check if data has changed before updating state
+        if (JSON.stringify(data) !== JSON.stringify(datas)) {
+          setDatas(data)
+          setVisitsData(data)
+
+          if (data.meta) {
+            setTotalVisitPages(data.meta.totalPages)
+            setCurrentVisitPage((prev) => Math.min(prev, data.meta.totalPages))
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching visits:", err)
+      }
+    }
+
+    // Set up polling interval (every 5 seconds)
+    const intervalId = setInterval(fetchVisitsData, 5000)
+
+    // Clean up interval on component unmount or tab change
+    return () => clearInterval(intervalId)
+  }, [activeTab, currentVisitPage, visitStatusFilter, visitSearchTerm, token, datas, visitsPerPage])
 
   return (
     <div className="p-4 ">
@@ -1650,11 +1713,11 @@ export default function DashboardPage() {
 
           {/* Pagination for Visits */}
           {totalVisitPages > 1 && (
-            <div className="flex items-center justify-between mt-4 text-sm">
-              <div>
+            <div className="flex items-center justify-between mt-4">
+              <div className="text-sm text-muted-foreground">
                 Showing {(currentVisitPage - 1) * visitsPerPage + 1} to{" "}
-                {Math.min(currentVisitPage * visitsPerPage, totalVisitPages * visitsPerPage)} of{" "}
-                {totalVisitPages * visitsPerPage} results
+                {Math.min(currentVisitPage * visitsPerPage, datas?.meta?.totalItems || 0)} of{" "}
+                {datas?.meta?.totalItems || 0} results
               </div>
               <div className="flex items-center space-x-2">
                 <Button
@@ -1666,17 +1729,47 @@ export default function DashboardPage() {
                   <span className="sr-only">Previous page</span>
                   &lt;
                 </Button>
-                {Array.from({ length: totalVisitPages }, (_, index) => index + 1).map((page) => (
-                  <Button
-                    key={page}
-                    variant="outline"
-                    size="sm"
-                    className={`h-8 w-8 p-0 ${currentVisitPage === page ? "bg-yellow-100" : ""}`}
-                    onClick={() => handleVisitPageChange(page)}
-                  >
-                    {page}
-                  </Button>
-                ))}
+                <div className="flex items-center">
+                  {Array.from({ length: Math.min(5, totalVisitPages) }, (_, i) => {
+                    // Show pages around the current page
+                    let pageToShow
+                    if (totalVisitPages <= 5) {
+                      pageToShow = i + 1
+                    } else if (currentVisitPage <= 3) {
+                      pageToShow = i + 1
+                    } else if (currentVisitPage >= totalVisitPages - 2) {
+                      pageToShow = totalVisitPages - 4 + i
+                    } else {
+                      pageToShow = currentVisitPage - 2 + i
+                    }
+
+                    return (
+                      <Button
+                        key={pageToShow}
+                        variant={currentVisitPage === pageToShow ? "default" : "outline"}
+                        size="sm"
+                        className={`h-8 w-8 p-0 ${currentVisitPage === pageToShow ? "bg-primary text-primary-foreground" : ""}`}
+                        onClick={() => handleVisitPageChange(pageToShow)}
+                      >
+                        {pageToShow}
+                      </Button>
+                    )
+                  })}
+
+                  {totalVisitPages > 5 && currentVisitPage < totalVisitPages - 2 && (
+                    <>
+                      {currentVisitPage < totalVisitPages - 3 && <span className="mx-1">...</span>}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 w-8 p-0"
+                        onClick={() => handleVisitPageChange(totalVisitPages)}
+                      >
+                        {totalVisitPages}
+                      </Button>
+                    </>
+                  )}
+                </div>
                 <Button
                   variant="outline"
                   size="icon"
