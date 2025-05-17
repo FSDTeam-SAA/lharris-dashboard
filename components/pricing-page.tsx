@@ -373,7 +373,7 @@ export function PricingPage() {
                           <h3>Features: </h3>
                         </div>
                         <div
-                          className="list-item list-none pb-10 min-h-[100px]"
+                          className="list-item list-none pb-10 h-[200px] "
                           dangerouslySetInnerHTML={{
                             __html: plan?.description || "Plan Description",
                           }}
@@ -638,7 +638,7 @@ export function PricingPage() {
 
       {/* Edit Package Dialog */}
       <Dialog open={isEditPackageOpen} onOpenChange={setIsEditPackageOpen}>
-        <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll max-h-screen overflow-y-scroll">
+        <DialogContent className="sm:max-w-md max-h-screen  max-h-screen overflow-y-scroll">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <div className="bg-[#0a1172] text-white p-1 rounded-full mr-2">
