@@ -242,8 +242,8 @@ export default function DashboardPage() {
     confirmVisits: 0,
     inProgress: 0,
   })
-  console.log("Metrics:", metrics);
-  
+  console.log("Metrics:", metrics)
+
   const [isLoading, setIsLoading] = useState(true)
   // const [error, setError] = useState<string | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -256,8 +256,8 @@ export default function DashboardPage() {
     role: "client" as "client" | "admin" | "staff",
   })
   const [visitsData, setVisitsData] = useState<VisitResponse | null>(null)
-  console.log();
-  
+  console.log()
+
   const [specificVisit, setSpecificVisit] = useState<SpecificVisitResponse | null>(null)
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
   const [selectedVisitId, setSelectedVisitId] = useState("")
@@ -338,10 +338,10 @@ export default function DashboardPage() {
 
         // Update metrics with data from API
         setMetrics({
-          activeUsers: data?.data?.activeUsersCount ,
-          totalVisits: data?.data?.totalVisits ,
+          activeUsers: data?.data?.activeUsersCount,
+          totalVisits: data?.data?.totalVisits,
           pendingVisits: data?.data?.pendingVisits ?? 12,
-          totalSecurityStaff: data?.data?.totalStaffMembers ,
+          totalSecurityStaff: data?.data?.totalStaffMembers,
           totalAdmin: data?.data?.totalAdmins,
           confirmVisits: data?.data?.confirmVisits,
           inProgress: data?.data?.inProgress,
@@ -448,10 +448,9 @@ export default function DashboardPage() {
     }
   }, [activeTab, token, currentUserPage, roleFilter, statusFilter, searchTerm, fetchUsers])
 
-
   const [datas, setDatas] = useState<VisitResponse | null>(null)
-  console.log("Visit Data:", datas);
-  
+  console.log("Visit Data:", datas)
+
   useEffect(() => {
     const fetchVisits = async () => {
       try {
@@ -486,9 +485,8 @@ export default function DashboardPage() {
 
         const data = await res.json()
         setDatas(data)
-        
-        
-        // setVisitsData(data)
+        setVisitsData(data) // Add this line to update visitsData state as well
+
         if (data.meta) {
           setTotalVisitPages(data.meta.totalPages)
           setCurrentVisitPage(data.meta.currentPage)
@@ -503,7 +501,6 @@ export default function DashboardPage() {
       fetchVisits()
     }
   }, [activeTab, currentVisitPage, visitStatusFilter, visitSearchTerm, token])
-  
 
   const handleStatusFilterChange = (newFilter: string) => {
     setVisitStatusFilter(newFilter)
@@ -1599,8 +1596,8 @@ export default function DashboardPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {visitsData?.data && visitsData.data.length > 0 ? (
-                    visitsData.data.map((visit) => (
+                  {datas?.data && datas.data.length > 0 ? (
+                    datas.data.map((visit) => (
                       <TableRow key={visit._id}>
                         <TableCell>{formatDate(visit.date)}</TableCell>
                         <TableCell>{extractTime(visit.date)}</TableCell>
@@ -1608,7 +1605,7 @@ export default function DashboardPage() {
                         <TableCell>
                           {visit?.client?.fullname}
                           <div>
-                          <span className="text-xs text-gray-500">{visit?.client?.email}</span>
+                            <span className="text-xs text-gray-500">{visit?.client?.email}</span>
                           </div>
                         </TableCell>
                         <TableCell>{visit.staff?.fullname || "Not Assigned"}</TableCell>
