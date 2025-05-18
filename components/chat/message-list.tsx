@@ -36,12 +36,12 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
 
   return (
     <div className="p-4 overflow-y-auto">
-      {messages.map((message, index) => (
+      {messages?.map((message, index) => (
         <MessageItem
-          key={message._id || index}
+          key={message?._id || index}
           message={message}
           showAvatar={
-            index === 0 || messages[index - 1].sender !== message.sender
+            index === 0 || messages[index - 1].sender !== message?.sender
           }
         />
       ))}

@@ -215,7 +215,7 @@ export function PricingPage() {
       await deletePlan(selectedPlanId)
       toast.success("Plan deleted successfully")
       setIsDeletePackageOpen(false)
-      setPlans((prevPlans) => prevPlans.filter((plan) => plan._id !== selectedPlanId))
+      setPlans((prevPlans) => prevPlans.filter((plan) => plan?._id !== selectedPlanId))
       setSelectedPlanId("")
     } catch (error) {
       // console.error("Error deleting plan:", error)
@@ -250,15 +250,15 @@ export function PricingPage() {
   }
 
   const handleEditClick = (plan: Plan) => {
-    setSelectedPlanId(plan._id)
+    setSelectedPlanId(plan?._id)
     setEditingPlan(plan)
     form.reset({
-      name: plan.name,
-      subTitle: plan.subTitle,
-      price: plan.price,
-      description: plan.description,
-      pack: plan.pack as "weekly" | "monthly" | "daily",
-      type: plan.type as "flexible" | "tiered"
+      name: plan?.name,
+      subTitle: plan?.subTitle,
+      price: plan?.price,
+      description: plan?.description,
+      pack: plan?.pack as "weekly" | "monthly" | "daily",
+      type: plan?.type as "flexible" | "tiered"
     })
     setIsEditPackageOpen(true)
   }
@@ -285,7 +285,6 @@ export function PricingPage() {
     setPage(newPage)
   }
 
-  console.log(plans)
 
   return (
     <div className="flex flex-col h-full">
@@ -349,21 +348,21 @@ export function PricingPage() {
                 <h3 className="text-lg font-semibold pb-7 pl-1 text-[#18181B]">Plans</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                {plans.length > 0 ? (
-                  plans.map((plan) => (
-                    <Card key={plan._id} className="relative">
+                {plans?.length > 0 ? (
+                  plans?.map((plan) => (
+                    <Card key={plan?._id} className="relative">
                       <CardHeader className="pb-2">
                         <CardTitle className="flex justify-between">
-                          <span className="capitalize text-2xl">{plan.name}</span>
+                          <span className="capitalize text-2xl">{plan?.name}</span>
                         </CardTitle>
                         <CardDescription className="text-lg font-medium text-[#000000] capitalize">
-                          <p className="py-4">{plan.subTitle}</p>
+                          <p className="py-4">{plan?.subTitle}</p>
                           <div className="flex justify-between items-center text-base">
                             <div className="">
-                              ${plan.price} / {plan.pack}
+                              ${plan?.price} / {plan?.pack}
                             </div>
                             <div className="t">
-                              Type: {plan.type}
+                              Type: {plan?.type}
                             </div>
                           </div>
                         </CardDescription>
@@ -384,7 +383,7 @@ export function PricingPage() {
                           size="sm"
                           onClick={() => {
                             setIsEditPackageOpen(true)
-                            setSelectedPlanId(plan._id)
+                            setSelectedPlanId(plan?._id)
                             handleEditClick(plan)
                           }}
                           className="bg-[#091057] text-[#F7E39F]"
@@ -395,7 +394,7 @@ export function PricingPage() {
                           size="sm"
                           onClick={() => {
                             setIsDeletePackageOpen(true)
-                            setSelectedPlanId(plan._id)
+                            setSelectedPlanId(plan?._id)
                           }}
                           className="hover:bg-[#1a2182] bg-transparent border border-[#091057] text-[#091057] hover:text-[#F7E39F]"
                         >
@@ -434,17 +433,17 @@ export function PricingPage() {
                       </TableHeader>
                       <TableBody>
                         {payments?.data?.map((item: Payment) => (
-                          <TableRow key={item.id} className="text-center">
-                            <TableCell className="font-medium pl-3 text-start">{item.transactionId}</TableCell>
+                          <TableRow key={item?.id} className="text-center">
+                            <TableCell className="font-medium pl-3 text-start">{item?.transactionId}</TableCell>
                             <TableCell>
-                              {new Date(item.paymentDate).toLocaleDateString("en-US", {
+                              {new Date(item?.paymentDate).toLocaleDateString("en-US", {
                                 year: "numeric",
                                 month: "short",
                                 day: "numeric",
                               })}
                             </TableCell>
                             <TableCell>
-                              {new Date(item.paymentDate).toLocaleTimeString("en-US", {
+                              {new Date(item?.paymentDate).toLocaleTimeString("en-US", {
                                 hour: "numeric",
                                 minute: "2-digit",
                                 hour12: true,

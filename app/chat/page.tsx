@@ -37,7 +37,6 @@ export default function AdminChatPage() {
 
       socket.on("newMessage", (newMessage: Message) => {
         setMessages((prev) => [...prev, newMessage]);
-        console.log("newMessage", newMessage);
       });
 
       return () => {
@@ -77,7 +76,6 @@ export default function AdminChatPage() {
   }, [session?.accessToken, activeConversation]);
 
   const handleSelectConversation = (conversation: Conversation) => {
-    // console.log(conversation);
     setActiveConversation(conversation);
   };
 
@@ -121,7 +119,7 @@ export default function AdminChatPage() {
     <div className="flex h-[93vh]">
       <div className="w-80 flex-shrink-0">
         <div className="h-16 border-b flex items-center px-4">
-          <h1 className="font-semibold">Admin Dashboard</h1>
+          <h1 className="font-semibold">All Messages</h1>
         </div>
         <ConversationList
           activeConversationId={activeConversation?._id || null}

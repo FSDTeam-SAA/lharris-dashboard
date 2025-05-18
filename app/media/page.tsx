@@ -97,7 +97,6 @@ export default function MediaPage() {
       );
 
       if (!response.ok) {
-        console.log("Error: ", response.status);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
@@ -136,7 +135,6 @@ export default function MediaPage() {
       );
 
       if (!response.ok) {
-        // console.log("Error: ", response.status);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
@@ -198,25 +196,25 @@ export default function MediaPage() {
                 </TableHeader>
                 <TableBody>
                   {visits?.data?.reverse().map((item: Visit) => (
-                    <TableRow key={item._id} className="text-center">
+                    <TableRow key={item?._id} className="text-center">
                       <TableCell className="font-medium pl-10">
-                        {item.visitId}
+                        {item?.visitId}
                       </TableCell>
                       <TableCell>
-                        {new Date(item.date).toLocaleDateString("en-US", {
+                        {new Date(item?.date).toLocaleDateString("en-US", {
                           year: "numeric",
                           month: "short",
                           day: "numeric",
                         })}
                       </TableCell>
                       <TableCell>
-                        {new Date(item.date).toLocaleTimeString("en-US", {
+                        {new Date(item?.date).toLocaleTimeString("en-US", {
                           hour: "numeric",
                           minute: "2-digit",
                           hour12: true,
                         })}
                       </TableCell>
-                      <TableCell>{item.client?.fullname}</TableCell>
+                      <TableCell>{item?.client?.fullname}</TableCell>
                       <TableCell>
                         <div className="flex justify-center gap-2">
                           {item?.staff ? (
@@ -236,9 +234,9 @@ export default function MediaPage() {
                       <TableCell>
                         <Badge
                           variant={
-                            item.status === "completed"
+                            item?.status === "completed"
                               ? "default"
-                              : item.status === "cancelled"
+                              : item?.status === "cancelled"
                                 ? "destructive"
                                 : "outline"
                           }
@@ -276,7 +274,7 @@ export default function MediaPage() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => openDeleteDialog(item._id)}
+                            onClick={() => openDeleteDialog(item?._id)}
                           >
                             <Trash className="h-4 w-4" />
                           </Button>

@@ -428,22 +428,22 @@ export function UsersPage() {
                       Loading...
                     </TableCell>
                   </TableRow>
-                ) : users.length > 0 ? (
-                  users.map((user, index) => (
-                    <TableRow key={user._id}>
+                ) : users?.length > 0 ? (
+                  users?.map((user, index) => (
+                    <TableRow key={user?._id}>
                       <TableCell>{(currentPage - 1) * itemsPerPage + index + 1}</TableCell>
-                      <TableCell>{user.fullname}</TableCell>
-                      <TableCell>{user.email}</TableCell>
-                      <TableCell>{user.role}</TableCell>
+                      <TableCell>{user?.fullname}</TableCell>
+                      <TableCell>{user?.email}</TableCell>
+                      <TableCell>{user?.role}</TableCell>
                       <TableCell>
                         <span
-                          className={`px-2 py-1 rounded-full text-xs ${user.status === "active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                          className={`px-2 py-1 rounded-full text-xs ${user?.status === "active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                             }`}
                         >
-                          {user.status}
+                          {user?.status}
                         </span>
                       </TableCell>
-                      <TableCell>{formatLastActive(user.lastActive)}</TableCell>
+                      <TableCell>{formatLastActive(user?.lastActive)}</TableCell>
                       <TableCell>
                         <div className="flex space-x-2">
                           <Button
@@ -452,17 +452,17 @@ export function UsersPage() {
                             onClick={() => {
                               setCurrentUser(user)
                               setEditUser({
-                                fullname: user.fullname,
-                                email: user.email,
+                                fullname: user?.fullname,
+                                email: user?.email,
                                 password: "",
-                                role: user.role,
+                                role: user?.role,
                               })
                               setIsEditUserOpen(true)
                             }}
                           >
                             <Pencil className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => confirmDeleteUser(user._id)}>
+                          <Button variant="ghost" size="icon" onClick={() => confirmDeleteUser(user?._id)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>

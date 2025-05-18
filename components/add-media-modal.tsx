@@ -55,7 +55,7 @@ export function AddMediaModal({ open, onOpenChange, medias }: AddMediaModalProps
 
   const session = useSession()
 
-  const TOKEN = session.data?.accessToken
+  const TOKEN = session?.data?.accessToken
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
