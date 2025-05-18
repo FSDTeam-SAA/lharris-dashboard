@@ -197,7 +197,7 @@ export default function MediaPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {visits?.data?.map((item: Visit) => (
+                  {visits?.data?.reverse().map((item: Visit) => (
                     <TableRow key={item._id} className="text-center">
                       <TableCell className="font-medium pl-10">
                         {item.visitId}
