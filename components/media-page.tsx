@@ -53,19 +53,18 @@ export function MediaPage() {
   const [isViewMediaOpen, setIsViewMediaOpen] = useState(false)
   const [currentMedia, setCurrentMedia] = useState<MediaItem | null>(null)
   const [activeTab, setActiveTab] = useState("list")
-  console.log("activeTab", activeTab);
-  
+  console.log(activeTab);
 
   
 
   const filteredMedia = mediaItems.filter((item) => {
     const matchesSearch =
-      item.clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.staffName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.id.includes(searchTerm)
-    const matchesDate = selectedDate ? item.date === selectedDate : true
-    const matchesMediaType = selectedMediaType ? item.mediaType === selectedMediaType : true
-    const matchesVisitType = selectedVisitType ? item.visitType === selectedVisitType : true
+      item?.clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item?.staffName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item?.id.includes(searchTerm)
+    const matchesDate = selectedDate ? item?.date === selectedDate : true
+    const matchesMediaType = selectedMediaType ? item?.mediaType === selectedMediaType : true
+    const matchesVisitType = selectedVisitType ? item?.visitType === selectedVisitType : true
 
     return matchesSearch && matchesDate && matchesMediaType && matchesVisitType
   })
@@ -158,18 +157,18 @@ export function MediaPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredMedia.map((item) => (
-                      <TableRow key={item.id}>
-                        <TableCell>{item.id}</TableCell>
-                        <TableCell>{item.date}</TableCell>
-                        <TableCell>{item.time}</TableCell>
-                        <TableCell>{item.clientName}</TableCell>
-                        <TableCell>{item.staffName}</TableCell>
-                        <TableCell>{item.mediaType}</TableCell>
-                        <TableCell>{item.visitType}</TableCell>
+                    {filteredMedia?.map((item) => (
+                      <TableRow key={item?.id}>
+                        <TableCell>{item?.id}</TableCell>
+                        <TableCell>{item?.date}</TableCell>
+                        <TableCell>{item?.time}</TableCell>
+                        <TableCell>{item?.clientName}</TableCell>
+                        <TableCell>{item?.staffName}</TableCell>
+                        <TableCell>{item?.mediaType}</TableCell>
+                        <TableCell>{item?.visitType}</TableCell>
                         <TableCell>
-                          <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(item.status)}`}>
-                            {item.status}
+                          <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(item?.status)}`}>
+                            {item?.status}
                           </span>
                         </TableCell>
                         <TableCell>
@@ -224,7 +223,7 @@ export function MediaPage() {
 
             <TabsContent value="grid" className="mt-0">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {filteredMedia.map((item, index) => (
+                {filteredMedia?.map((item, index) => (
                   <div
                     key={index}
                     className="bg-gray-100 rounded-lg overflow-hidden cursor-pointer"
@@ -234,7 +233,7 @@ export function MediaPage() {
                     }}
                   >
                     <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                      {item.mediaType === "Video" ? (
+                      {item?.mediaType === "Video" ? (
                         <Video className="h-12 w-12 text-gray-400" />
                       ) : (
                         <ImageIcon className="h-12 w-12 text-gray-400" />
@@ -242,18 +241,18 @@ export function MediaPage() {
                     </div>
                     <div className="p-3">
                       <div className="flex justify-between items-center mb-2">
-                        <div className="text-sm font-medium">{item.clientName}</div>
-                        <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(item.status)}`}>
-                          {item.status}
+                        <div className="text-sm font-medium">{item?.clientName}</div>
+                        <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(item?.status)}`}>
+                          {item?.status}
                         </span>
                       </div>
                       <div className="flex items-center text-xs text-gray-500 mb-1">
                         <Calendar className="h-3 w-3 mr-1" />
-                        {item.date}, {item.time}
+                        {item?.date}, {item?.time}
                       </div>
                       <div className="flex items-center text-xs text-gray-500">
                         <span className="font-medium mr-1">Visit:</span>
-                        {item.visitType}
+                        {item?.visitType}
                       </div>
                     </div>
                   </div>

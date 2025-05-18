@@ -156,7 +156,7 @@ export function AddonServices() {
             if (result.status) {
                 toast.success("Add-on service deleted successfully")
                 setIsDeleteAddonOpen(false)
-                setAddonServices((prevAddons) => prevAddons.filter((addon) => addon._id !== selectedAddonId))
+                setAddonServices((prevAddons) => prevAddons.filter((addon) => addon?._id !== selectedAddonId))
                 setSelectedAddonId("")
             } else {
                 toast.error(result.message || "Failed to delete add-on service")
@@ -169,14 +169,14 @@ export function AddonServices() {
     }
 
     const handleEditClick = (addon: AddonService) => {
-        setSelectedAddonId(addon._id)
+        setSelectedAddonId(addon?._id)
         setEditingAddon(addon)
         form.reset({
-            name: addon.name || "",
-            flexiblePrice: addon.flexiblePrice,
-            tieredPrice: addon.tieredPrice,
-            description: addon.description || "",
-            pack: (addon.pack as "weekly" | "monthly" | "daily" | "per-patrol" | "incident" | "visit") || "per-patrol",
+            name: addon?.name || "",
+            flexiblePrice: addon?.flexiblePrice,
+            tieredPrice: addon?.tieredPrice,
+            description: addon?.description || "",
+            pack: (addon?.pack as "weekly" | "monthly" | "daily" | "per-patrol" | "incident" | "visit") || "per-patrol",
         })
         setIsEditAddonOpen(true)
     }
@@ -197,20 +197,20 @@ export function AddonServices() {
                 </div>
             ) : addonServices.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    {addonServices.map((addon) => (
-                        <Card key={addon._id}>
+                    {addonServices?.map((addon) => (
+                        <Card key={addon?._id}>
                             <CardHeader className="pb-2">
                                 <CardTitle className="flex justify-between">
-                                    <span className="capitalize text-2xl py-2">{addon.name || addon.addOn || "Add-on Service"}</span>
+                                    <span className="capitalize text-2xl py-2">{addon?.name || addon?.addOn || "Add-on Service"}</span>
                                 </CardTitle>
                                 <CardDescription className="text-sm py-2 font-medium text-[#000000] capitalize">
                                     <div className="flex justify-between">
                                         <div className="">
-                                            <p> Flexible Price: ${addon.flexiblePrice}</p>
-                                            <p> Tiered Price: ${addon.tieredPrice}</p>
+                                            <p> Flexible Price: ${addon?.flexiblePrice}</p>
+                                            <p> Tiered Price: ${addon?.tieredPrice}</p>
                                         </div>
                                         <div className="">
-                                            Pack: {addon.pack}
+                                            Pack: {addon?.pack}
                                         </div>
                                     </div>
                                 </CardDescription>
@@ -219,7 +219,7 @@ export function AddonServices() {
                                 <div className="">
                                     <h3>Details: </h3>
                                 </div>
-                                <div className="mt-2">{addon.description || "No description available"}</div>
+                                <div className="mt-2">{addon?.description || "No description available"}</div>
                             </CardContent>
                             <CardFooter className="flex items-center gap-2 text-base">
                                 <Button size="sm" onClick={() => handleEditClick(addon)} className="bg-[#091057] text-[#F7E39F]">
@@ -229,7 +229,7 @@ export function AddonServices() {
                                     size="sm"
                                     onClick={() => {
                                         setIsDeleteAddonOpen(true)
-                                        setSelectedAddonId(addon._id)
+                                        setSelectedAddonId(addon?._id)
                                     }}
                                     className="hover:bg-[#1a2182] bg-transparent border border-[#091057] text-[#091057] hover:text-[#F7E39F]"
                                 >

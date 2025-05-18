@@ -66,18 +66,19 @@ export function AuditLogsPage() {
   const [selectedStatus, setSelectedStatus] = useState<string>("");
   const [isLogDetailsOpen, setIsLogDetailsOpen] = useState(false);
   const [currentLog, setCurrentLog] = useState<Log | null>(null);
-  console.log(currentLog, "currentLog");
+
+  console.log(currentLog);
 
   const filteredLogs = logs.filter((log) => {
     const matchesSearch =
-      log.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.activity.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.id.includes(searchTerm);
-    const matchesUser = selectedUser ? log.user === selectedUser : true;
+      log?.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      log?.activity.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      log?.id.includes(searchTerm);
+    const matchesUser = selectedUser ? log?.user === selectedUser : true;
     const matchesActivity = selectedActivity
-      ? log.activity === selectedActivity
+      ? log?.activity === selectedActivity
       : true;
-    const matchesStatus = selectedStatus ? log.status === selectedStatus : true;
+    const matchesStatus = selectedStatus ? log?.status === selectedStatus : true;
 
     return matchesSearch && matchesUser && matchesActivity && matchesStatus;
   });
@@ -177,20 +178,20 @@ export function AuditLogsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredLogs.map((log, index) => (
+                {filteredLogs?.map((log, index) => (
                   <TableRow key={index}>
-                    <TableCell>{log.id}</TableCell>
-                    <TableCell>{log.timestamp}</TableCell>
-                    <TableCell>{log.user}</TableCell>
-                    <TableCell>{log.role}</TableCell>
-                    <TableCell>{log.activity}</TableCell>
+                    <TableCell>{log?.id}</TableCell>
+                    <TableCell>{log?.timestamp}</TableCell>
+                    <TableCell>{log?.user}</TableCell>
+                    <TableCell>{log?.role}</TableCell>
+                    <TableCell>{log?.activity}</TableCell>
                     <TableCell>
                       <span
                         className={`px-2 py-1 rounded-full text-xs ${getStatusClass(
-                          log.status
+                          log?.status
                         )}`}
                       >
-                        {log.status}
+                        {log?.status}
                       </span>
                     </TableCell>
                     <TableCell>
