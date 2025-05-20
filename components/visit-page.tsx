@@ -174,6 +174,8 @@ export function VisitPage() {
     setFormErrors((prev) => ({ ...prev, [field]: "" }))
   }
 
+
+
   const refreshVisitData = async () => {
     setIsLoading(true)
     try {
@@ -208,7 +210,6 @@ export function VisitPage() {
       if (!visitsResponse.ok) throw new Error("Failed to fetch visits")
       const visitsData = await visitsResponse.json()
 
-     
 
       // Update filtered visits directly from API response
       setFilteredVisits(
@@ -223,7 +224,7 @@ export function VisitPage() {
           status: visit.status || "pending",
           address: visit.address || "",
           notes: visit.notes || "",
-          visitId: visit.visitId || "",
+          visitId: visit.visitId || ""
         })),
       )
 
@@ -240,6 +241,7 @@ export function VisitPage() {
       setIsLoading(false)
     }
   }
+
 
   // Fetch visits and staff from API
   useEffect(() => {
@@ -696,6 +698,7 @@ export function VisitPage() {
     setIsNavigating(false)
   }, [])
 
+
   return (
     <div
       className={`flex flex-col h-full transition-opacity duration-300 ${isNavigating ? "opacity-70" : "opacity-100"}`}
@@ -765,7 +768,7 @@ export function VisitPage() {
                         {visit.clientName}
                         <div>
                           <span className="text-xs text-gray-500">{visit.clientEmail}</span>
-                      </div>
+                        </div>
                       </TableCell>
                       <TableCell>{visit.staffName}</TableCell>
                       <TableCell>
@@ -1084,6 +1087,16 @@ export function VisitPage() {
                 <span className="text-sm font-medium">Notes:</span>
                 <span className="text-sm">{currentVisit.notes || "No notes available"}</span>
               </div>
+              {currentVisit?.isPaid && (
+                <div>
+                  <h4 className="text-sm font-medium mb-1">Ad-on Services: </h4>
+                  <ul className="text-sm">
+                    {currentVisit?.userPlan?.addOnServices?.map((service: string, index: number) => (
+                      <li key={index}>{service}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           )}
           <DialogFooter className="sm:justify-center">

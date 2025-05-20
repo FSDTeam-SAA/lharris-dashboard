@@ -109,6 +109,10 @@ interface SpecificVisitResponse {
     fullname: string
     email: string
   }
+  userPlan?: {
+    _id: string
+    addOnServices: string[]
+  }
   address?: string
   date?: string
   status?: string
@@ -1023,6 +1027,8 @@ export default function DashboardPage() {
     return () => clearInterval(intervalId)
   }, [activeTab, currentVisitPage, visitStatusFilter, visitSearchTerm, token, datas, visitsPerPage])
 
+
+
   return (
     <div className="p-4 ">
       <PageHeader title="Admin Name" />
@@ -1916,6 +1922,17 @@ export default function DashboardPage() {
                 <h4 className="text-sm font-medium mb-1">Notes</h4>
                 <p className="text-sm">{specificVisit.notes || "No notes available"}</p>
               </div>
+
+              {specificVisit?.isPaid && (
+                <div>
+                  <h4 className="text-sm font-medium mb-1">Ad-on Services: </h4>
+                  <ul className="text-sm">
+                    {specificVisit?.userPlan?.addOnServices?.map((service: string, index: number) => (
+                      <li key={index}>{service}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {specificVisit.issues && specificVisit.issues.length > 0 && (
                 <div>
