@@ -348,28 +348,61 @@ export function PricingPage() {
                 <h3 className="text-lg font-semibold pb-7 pl-1 text-[#18181B]">Plans</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                {plans?.length > 0 ? (
-                  plans?.map((plan) => (
-                    <Card key={plan?._id} className="relative">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="flex justify-between">
-                          <span className="capitalize text-2xl">{plan?.name}</span>
-                        </CardTitle>
-                        <CardDescription className="text-lg font-medium text-[#000000] capitalize">
-                          <p className="py-4">{plan?.subTitle}</p>
-                          <div className="flex justify-between items-center text-base">
-                            <div className="">
-                              ${plan?.price} / {plan?.pack}
+                {plans.length > 0 ? (
+                  plans.map((plan) => (
+                    <Card key={plan._id} className="flex flex-col justify-between">
+                      <div className="">
+                        <CardHeader className="pb-6">
+                          <CardTitle className="flex justify-between">
+                            <span className="capitalize text-2xl">{plan.name}</span>
+                          </CardTitle>
+                          <CardDescription className="text-lg font-medium text-[#000000] capitalize">
+                            <p className="py-4">{plan.subTitle}</p>
+                            <div className="flex justify-between items-center text-base">
+                              <div className="">
+                                ${plan.price} / {plan.pack}
+                              </div>
+                              <div className="t">
+                                Type: {plan.type}
+                              </div>
                             </div>
-                            <div className="t">
-                              Type: {plan?.type}
-                            </div>
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="pb-2">
+                          <div className="">
+                            <h3>Features: </h3>
                           </div>
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="pb-2">
-                        <div className="">
-                          <h3>Features: </h3>
+                          <div
+                            className="list-item list-none"
+                            dangerouslySetInnerHTML={{
+                              __html: plan?.description || "Plan Description",
+                            }}
+                          />
+                        </CardContent>
+                      </div>
+                      <CardFooter className="">
+                        <div className="flex items-end gap-2 text-base">
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              setIsEditPackageOpen(true)
+                              setSelectedPlanId(plan._id)
+                              handleEditClick(plan)
+                            }}
+                            className="bg-[#091057] text-[#F7E39F]"
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              setIsDeletePackageOpen(true)
+                              setSelectedPlanId(plan._id)
+                            }}
+                            className="hover:bg-[#1a2182] bg-transparent border border-[#091057] text-[#091057] hover:text-[#F7E39F]"
+                          >
+                            Delete
+                          </Button>
                         </div>
                         <div
                           className="list-item list-none pb-10 h-[200px] "
@@ -377,7 +410,7 @@ export function PricingPage() {
                             __html: plan?.description || "Plan Description",
                           }}
                         />
-                      </CardContent>
+                      </CardFooter>
                       <CardFooter className="flex items-center gap-2 text-base absolute bottom-0">
                         <Button
                           size="sm"
