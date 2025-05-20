@@ -1087,7 +1087,7 @@ export function VisitPage() {
                 <span className="text-sm font-medium">Notes:</span>
                 <span className="text-sm">{currentVisit.notes || "No notes available"}</span>
               </div>
-              {currentVisit?.isPaid && (
+              {/* {currentVisit?.isPaid && (
                 <div>
                   <h4 className="text-sm font-medium mb-1">Ad-on Services: </h4>
                   <ul className="text-sm">
@@ -1096,7 +1096,7 @@ export function VisitPage() {
                     ))}
                   </ul>
                 </div>
-              )}
+              )} */}
             </div>
           )}
           <DialogFooter className="sm:justify-center">
