@@ -300,7 +300,6 @@ export default function DashboardPage() {
 
   // State for the overview tab visit filter
   const [overviewVisitStatusFilter, setOverviewVisitStatusFilter] = useState<string>("all")
-  const [isOverviewVisitsLoading, setIsOverviewVisitsLoading] = useState(false)
   const [isNotificationsLoading, setIsNotificationsLoading] = useState(false)
 
   // Debounce function for search
@@ -449,25 +448,16 @@ export default function DashboardPage() {
   }, [activeTab, token, currentUserPage, roleFilter, statusFilter, searchTerm, fetchUsers])
 
   const [datas, setDatas] = useState<VisitResponse | null>(null)
-  console.log("Visit Data:", datas)
 
   // Update the useEffect for fetching visits to properly handle pagination
   useEffect(() => {
     const fetchVisits = async () => {
       try {
         const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/visits/get-all-visit`
-        const queryParams = new URLSearchParams({
-          page: currentVisitPage.toString(),
-          limit: visitsPerPage.toString(),
-        })
+        const queryParams = new URLSearchParams()
 
         if (visitStatusFilter !== "all") {
           queryParams.append("status", visitStatusFilter)
-        }
-
-        // Add search term to query params if it exists
-        if (visitSearchTerm.trim()) {
-          queryParams.append("search", visitSearchTerm.trim())
         }
 
         const apiUrl = `${baseUrl}?${queryParams.toString()}`
@@ -488,10 +478,6 @@ export default function DashboardPage() {
         setDatas(data)
         setVisitsData(data)
 
-        if (data.meta) {
-          setTotalVisitPages(data.meta.totalPages)
-          setCurrentVisitPage(data.meta.currentPage)
-        }
       } catch (err) {
         console.error("Error fetching visits:", err)
         toast.error(err instanceof Error ? err.message : String(err))
@@ -501,7 +487,7 @@ export default function DashboardPage() {
     if (activeTab === "visits") {
       fetchVisits()
     }
-  }, [activeTab, currentVisitPage, visitStatusFilter, visitSearchTerm, token, visitsPerPage])
+  }, [activeTab, visitStatusFilter, token])
 
   const handleStatusFilterChange = (newFilter: string) => {
     setVisitStatusFilter(newFilter)
@@ -548,7 +534,6 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchVisitsForOverview = async () => {
       if (activeTab === "overview") {
-        setIsOverviewVisitsLoading(true)
         try {
           const queryParams = new URLSearchParams({ limit: "10" })
 
@@ -574,8 +559,6 @@ export default function DashboardPage() {
           setVisitsData(data)
         } catch (err) {
           console.error("Error fetching visits for overview:", err)
-        } finally {
-          setIsOverviewVisitsLoading(false)
         }
       }
     }
@@ -1286,21 +1269,17 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent className="max-h-[300px] overflow-y-auto pr-2">
                   <div className="space-y-4">
-                    {isOverviewVisitsLoading ? (
-                      <div className="flex justify-center items-center py-8">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4F46E5]"></div>
-                      </div>
-                    ) : visitsData?.data && visitsData.data.length > 0 ? (
+                    {visitsData?.data && visitsData.data.length > 0 ? (
                       visitsData.data.map((visit) => (
                         <div key={visit._id} className="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50">
                           <div
                             className={`w-2 self-stretch rounded-full ${visit.status.toLowerCase() === "completed"
-                                ? "bg-green-500"
-                                : visit.status.toLowerCase() === "cancelled"
-                                  ? "bg-red-500"
-                                  : visit.status.toLowerCase() === "confirmed"
-                                    ? "bg-blue-500"
-                                    : "bg-yellow-500"
+                              ? "bg-green-500"
+                              : visit.status.toLowerCase() === "cancelled"
+                                ? "bg-red-500"
+                                : visit.status.toLowerCase() === "confirmed"
+                                  ? "bg-blue-500"
+                                  : "bg-yellow-500"
                               }`}
                           ></div>
                           <div className="flex-1 min-w-0">
