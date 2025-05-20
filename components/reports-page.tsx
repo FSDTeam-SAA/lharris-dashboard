@@ -237,22 +237,22 @@ export function ReportsPage() {
   const filteredVisits =
     visitsData?.data.filter((visit) => {
       const matchesSearch =
-        visit.client.fullname
+        visit?.client?.fullname
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
-        (visit.staff?.fullname &&
-          visit.staff.fullname
+        (visit?.staff?.fullname &&
+          visit?.staff?.fullname
             .toLowerCase()
             .includes(searchTerm.toLowerCase())) ||
-        visit._id.includes(searchTerm) ||
-        visit.address.toLowerCase().includes(searchTerm.toLowerCase());
+        visit?._id.includes(searchTerm) ||
+        visit?.address.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStaff =
         selectedStaff === "all" ||
-        (visit.staff?.fullname && visit.staff.fullname === selectedStaff);
+        (visit?.staff?.fullname && visit?.staff?.fullname === selectedStaff);
       const matchesClient =
-        selectedClient === "all" || visit.client.fullname === selectedClient;
+        selectedClient === "all" || visit?.client?.fullname === selectedClient;
       const matchesReportType =
-        selectedReportType === "all" || visit.type === selectedReportType;
+        selectedReportType === "all" || visit?.type === selectedReportType;
 
       return (
         matchesSearch && matchesStaff && matchesClient && matchesReportType
@@ -260,17 +260,17 @@ export function ReportsPage() {
     }) || [];
 
   const uniqueClients = Array.from(
-    new Set(visitsData?.data.map((visit) => visit.client.fullname))
+    new Set(visitsData?.data.map((visit) => visit?.client?.fullname))
   );
   const uniqueStaff = Array.from(
     new Set(
       visitsData?.data
-        .filter((visit) => visit.staff)
-        .map((visit) => visit.staff!.fullname)
+        .filter((visit) => visit?.staff)
+        .map((visit) => visit?.staff!.fullname)
     )
   );
   const uniqueVisitTypes = Array.from(
-    new Set(visitsData?.data.map((visit) => visit.type).filter(Boolean))
+    new Set(visitsData?.data.map((visit) => visit?.type).filter(Boolean))
   );
 
   const handlePageChange = (page: number) => {
@@ -388,7 +388,7 @@ export function ReportsPage() {
             <Button
               onClick={exportToPDF}
               className="bg-blue-950 hover:bg-blue-900"
-              disabled={isRevenueLoading || revenueData.length === 0}
+              disabled={isRevenueLoading || revenueData?.length === 0}
             >
               <Download className="mr-2 h-4 w-4" /> Export
             </Button>
@@ -403,9 +403,9 @@ export function ReportsPage() {
                   <div className="text-xl font-bold">
                     {isRevenueLoading
                       ? "Loading..."
-                      : revenueData.length > 0
+                      : revenueData?.length > 0
                       ? `$${revenueData[
-                          revenueData.length - 1
+                          revenueData?.length - 1
                         ].revenue.toLocaleString()}`
                       : "$0"}
                   </div>
@@ -539,7 +539,7 @@ export function ReportsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Staff</SelectItem>
-                  {uniqueStaff.map((staff) => (
+                  {uniqueStaff?.map((staff) => (
                     <SelectItem key={staff} value={staff}>
                       {staff}
                     </SelectItem>
@@ -554,7 +554,7 @@ export function ReportsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Clients</SelectItem>
-                  {uniqueClients.map((client) => (
+                  {uniqueClients?.map((client) => (
                     <SelectItem key={client} value={client}>
                       {client}
                     </SelectItem>
@@ -572,7 +572,7 @@ export function ReportsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Types</SelectItem>
-                  {uniqueVisitTypes.map((type) => (
+                  {uniqueVisitTypes?.map((type) => (
                     <SelectItem key={type} value={type!}>
                       {type}
                     </SelectItem>
@@ -603,34 +603,34 @@ export function ReportsPage() {
                       Loading visits...
                     </TableCell>
                   </TableRow>
-                ) : filteredVisits.length > 0 ? (
-                  filteredVisits.map((visit) => (
-                    <TableRow key={visit._id}>
-                      <TableCell>{visit.visitId}</TableCell>
-                      <TableCell>{formatDate(visit.date)}</TableCell>
-                      <TableCell>{extractTime(visit.date)}</TableCell>
-                      <TableCell>{visit.client.fullname}</TableCell>
+                ) : filteredVisits?.length > 0 ? (
+                  filteredVisits?.map((visit) => (
+                    <TableRow key={visit?._id}>
+                      <TableCell>{visit?.visitId}</TableCell>
+                      <TableCell>{formatDate(visit?.date)}</TableCell>
+                      <TableCell>{extractTime(visit?.date)}</TableCell>
+                      <TableCell>{visit?.client?.fullname}</TableCell>
                       <TableCell>
-                        {visit.staff?.fullname || "Not Assigned"}
+                        {visit?.staff?.fullname || "Not Assigned"}
                       </TableCell>
                       <TableCell>
                         <span
                           className={`px-2 py-1 rounded-full text-xs ${getIssueClass(
-                            visit.issues
+                            visit?.issues
                           )}`}
                         >
-                          {visit.issues.length === 0
+                          {visit?.issues?.length === 0
                             ? "No Issue"
                             : "Issue Found"}
                         </span>
                       </TableCell>
-                      <TableCell>{visit.type || "N/A"}</TableCell>
+                      <TableCell>{visit?.type || "N/A"}</TableCell>
                       <TableCell>
                         <div className="flex space-x-2">
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => handleDeleteVisit(visit._id)}
+                            onClick={() => handleDeleteVisit(visit?._id)}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -652,13 +652,13 @@ export function ReportsPage() {
           {visitsData && (
             <div className="flex items-center justify-between mt-4 text-sm">
               <div>
-                Showing {(currentPage - 1) * visitsData.meta.itemsPerPage + 1}{" "}
+                Showing {(currentPage - 1) * visitsData?.meta.itemsPerPage + 1}{" "}
                 to{" "}
                 {Math.min(
-                  currentPage * visitsData.meta.itemsPerPage,
-                  visitsData.meta.totalItems
+                  currentPage * visitsData?.meta.itemsPerPage,
+                  visitsData?.meta.totalItems
                 )}{" "}
-                of {visitsData.meta.totalItems} results
+                of {visitsData?.meta.totalItems} results
               </div>
               <div className="flex items-center space-x-2">
                 <Button
@@ -671,7 +671,7 @@ export function ReportsPage() {
                   &lt;
                 </Button>
                 {Array.from(
-                  { length: visitsData.meta.totalPages },
+                  { length: visitsData?.meta?.totalPages },
                   (_, index) => index + 1
                 ).map((page) => (
                   <Button
@@ -689,7 +689,7 @@ export function ReportsPage() {
                 <Button
                   variant="outline"
                   size="icon"
-                  disabled={currentPage === visitsData.meta.totalPages}
+                  disabled={currentPage === visitsData?.meta?.totalPages}
                   onClick={() => handlePageChange(currentPage + 1)}
                 >
                   <span className="sr-only">Next page</span>

@@ -297,17 +297,17 @@ export function VisitPage() {
 
         // Update filtered visits directly from API response
         setFilteredVisits(
-          visitsData.data.map((visit: any) => ({
-            id: visit._id,
-            clientName: visit.client?.fullname || "N/A",
-            clientEmail: visit.client?.email || "",
-            staffName: visit.staff?.fullname || "Staff not assigned",
-            date: visit.date,
-            type: visit.type || "N/A",
-            status: visit.status || "pending",
-            address: visit.address || "",
-            notes: visit.notes || "",
-            visitId: visit.visitId || "",
+          visitsData?.data?.map((visit: any) => ({
+            id: visit?._id,
+            clientName: visit?.client?.fullname || "N/A",
+            clientEmail: visit?.client?.email || "",
+            staffName: visit?.staff?.fullname || "Staff not assigned",
+            date: visit?.date,
+            type: visit?.type || "N/A",
+            status: visit?.status || "pending",
+            address: visit?.address || "",
+            notes: visit?.notes || "",
+            visitId: visit?.visitId || "",
           })),
         )
 
@@ -345,7 +345,6 @@ export function VisitPage() {
   }, [currentVisit, staffList])
 
   const [filteredVisits, setFilteredVisits] = useState<Visit[]>([])
-  console.log("Filtered Visits:", filteredVisits)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -536,7 +535,7 @@ export function VisitPage() {
   const handleOpenStatusModal = (visit: Visit) => {
     setCurrentVisit(visit)
     setStatusForm({
-      status: visit.status,
+      status: visit?.status,
       notes: "",
     })
     setIsStatusModalOpen(true)
@@ -545,8 +544,8 @@ export function VisitPage() {
   const handleOpenAssignStaffModal = (visit: Visit) => {
     setCurrentVisit(visit)
     setAssignStaffForm({
-      staffId: staffList.find((s) => s.fullname === visit.staffName)?._id || "",
-      notes: visit.notes || "",
+      staffId: staffList.find((s) => s.fullname === visit?.staffName)?._id || "",
+      notes: visit?.notes || "",
     })
     setIsAssignStaffOpen(true)
   }
@@ -760,19 +759,19 @@ export function VisitPage() {
                       </div>
                     </TableCell>
                   </TableRow>
-                ) : filteredVisits.length > 0 ? (
-                  filteredVisits.map((visit) => (
-                    <TableRow key={visit.id}>
+                ) : filteredVisits?.length > 0 ? (
+                  filteredVisits?.map((visit) => (
+                    <TableRow key={visit?.id}>
                       <TableCell className="font-medium">{visit?.visitId}</TableCell>
                       <TableCell>
-                        {visit.clientName}
+                        {visit?.clientName}
                         <div>
                           <span className="text-xs text-gray-500">{visit.clientEmail}</span>
                         </div>
                       </TableCell>
-                      <TableCell>{visit.staffName}</TableCell>
+                      <TableCell>{visit?.staffName}</TableCell>
                       <TableCell>
-                        {new Date(visit.date).toLocaleString("en-GB", {
+                        {new Date(visit?.date).toLocaleString("en-GB", {
                           day: "numeric",
                           month: "short",
                           year: "numeric",
@@ -780,10 +779,10 @@ export function VisitPage() {
                           minute: "2-digit",
                         })}
                       </TableCell>
-                      <TableCell>{visit.type}</TableCell>
+                      <TableCell>{visit?.type}</TableCell>
                       <TableCell>
-                        <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(visit.status)}`}>
-                          {visit.status}
+                        <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(visit?.status)}`}>
+                          {visit?.status}
                         </span>
                       </TableCell>
                       <TableCell>
@@ -822,7 +821,7 @@ export function VisitPage() {
                             variant="ghost"
                             size="icon"
                             onClick={() => {
-                              setVisitToDelete(visit.id)
+                              setVisitToDelete(visit?.id)
                               setIsDeleteConfirmOpen(true)
                             }}
                           >
@@ -925,9 +924,9 @@ export function VisitPage() {
                   <SelectValue placeholder="Select Staff" />
                 </SelectTrigger>
                 <SelectContent>
-                  {staffList.map((staff) => (
-                    <SelectItem key={staff._id} value={staff._id}>
-                      {staff.fullname}
+                  {staffList?.map((staff) => (
+                    <SelectItem key={staff?._id} value={staff?._id}>
+                      {staff?.fullname}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -1400,9 +1399,9 @@ export function VisitPage() {
                   <SelectValue placeholder="Select Staff" />
                 </SelectTrigger>
                 <SelectContent>
-                  {staffList.map((staff) => (
-                    <SelectItem key={staff._id} value={staff._id}>
-                      {staff.fullname}
+                  {staffList?.map((staff) => (
+                    <SelectItem key={staff?._id} value={staff?._id}>
+                      {staff?.fullname}
                     </SelectItem>
                   ))}
                 </SelectContent>

@@ -215,7 +215,7 @@ export function PricingPage() {
       await deletePlan(selectedPlanId)
       toast.success("Plan deleted successfully")
       setIsDeletePackageOpen(false)
-      setPlans((prevPlans) => prevPlans.filter((plan) => plan._id !== selectedPlanId))
+      setPlans((prevPlans) => prevPlans.filter((plan) => plan?._id !== selectedPlanId))
       setSelectedPlanId("")
     } catch (error) {
       // console.error("Error deleting plan:", error)
@@ -250,15 +250,15 @@ export function PricingPage() {
   }
 
   const handleEditClick = (plan: Plan) => {
-    setSelectedPlanId(plan._id)
+    setSelectedPlanId(plan?._id)
     setEditingPlan(plan)
     form.reset({
-      name: plan.name,
-      subTitle: plan.subTitle,
-      price: plan.price,
-      description: plan.description,
-      pack: plan.pack as "weekly" | "monthly" | "daily",
-      type: plan.type as "flexible" | "tiered"
+      name: plan?.name,
+      subTitle: plan?.subTitle,
+      price: plan?.price,
+      description: plan?.description,
+      pack: plan?.pack as "weekly" | "monthly" | "daily",
+      type: plan?.type as "flexible" | "tiered"
     })
     setIsEditPackageOpen(true)
   }
@@ -285,7 +285,6 @@ export function PricingPage() {
     setPage(newPage)
   }
 
-  console.log(plans)
 
   return (
     <div className="flex flex-col h-full">
@@ -405,6 +404,35 @@ export function PricingPage() {
                             Delete
                           </Button>
                         </div>
+                        <div
+                          className="list-item list-none pb-10 h-[200px] "
+                          dangerouslySetInnerHTML={{
+                            __html: plan?.description || "Plan Description",
+                          }}
+                        />
+                      </CardFooter>
+                      <CardFooter className="flex items-center gap-2 text-base absolute bottom-0">
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            setIsEditPackageOpen(true)
+                            setSelectedPlanId(plan?._id)
+                            handleEditClick(plan)
+                          }}
+                          className="bg-[#091057] text-[#F7E39F]"
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            setIsDeletePackageOpen(true)
+                            setSelectedPlanId(plan?._id)
+                          }}
+                          className="hover:bg-[#1a2182] bg-transparent border border-[#091057] text-[#091057] hover:text-[#F7E39F]"
+                        >
+                          Delete
+                        </Button>
                       </CardFooter>
                     </Card>
                   ))
@@ -438,17 +466,17 @@ export function PricingPage() {
                       </TableHeader>
                       <TableBody>
                         {payments?.data?.map((item: Payment) => (
-                          <TableRow key={item.id} className="text-center">
-                            <TableCell className="font-medium pl-3 text-start">{item.transactionId}</TableCell>
+                          <TableRow key={item?.id} className="text-center">
+                            <TableCell className="font-medium pl-3 text-start">{item?.transactionId}</TableCell>
                             <TableCell>
-                              {new Date(item.paymentDate).toLocaleDateString("en-US", {
+                              {new Date(item?.paymentDate).toLocaleDateString("en-US", {
                                 year: "numeric",
                                 month: "short",
                                 day: "numeric",
                               })}
                             </TableCell>
                             <TableCell>
-                              {new Date(item.paymentDate).toLocaleTimeString("en-US", {
+                              {new Date(item?.paymentDate).toLocaleTimeString("en-US", {
                                 hour: "numeric",
                                 minute: "2-digit",
                                 hour12: true,

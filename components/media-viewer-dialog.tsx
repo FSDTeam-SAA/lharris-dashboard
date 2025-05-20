@@ -108,17 +108,17 @@ export function MediaViewerDialog({
                 {media?.issues[0]?.media?.map((item: any, index: number) => (
                   <CarouselItem key={index}>
                     <div className="p-1 lg:h-96 w-full">
-                      {item.type == "photo" ? (
+                      {item?.type == "photo" ? (
                         <Image
-                          src={item.url}
-                          alt={item.type}
+                          src={item?.url}
+                          alt={item?.type}
                           width={600}
                           height={400}
-                          className="w-full aspect-video"
+                          className="w-full aspect-video object-contain"
                         />
                       ) : (
                         <video controls className="w-full aspect-video">
-                          <source src={item.url} />
+                          <source src={item?.url} />
                         </video>
                       )}
                     </div>
@@ -138,7 +138,7 @@ export function MediaViewerDialog({
               {/* Client Row */}
               <div className="flex justify-between items-center">
                 <span className="font-medium">Client:</span>
-                <span className="">{media.client.fullname}</span>
+                <span className="">{media?.client?.fullname}</span>
               </div>
 
               {/* Date Row */}

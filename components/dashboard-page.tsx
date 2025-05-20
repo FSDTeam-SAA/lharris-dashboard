@@ -246,7 +246,6 @@ export default function DashboardPage() {
     confirmVisits: 0,
     inProgress: 0,
   })
-  console.log("Metrics:", metrics)
 
   const [isLoading, setIsLoading] = useState(true)
   // const [error, setError] = useState<string | null>(null)
@@ -260,7 +259,6 @@ export default function DashboardPage() {
     role: "client" as "client" | "admin" | "staff",
   })
   const [visitsData, setVisitsData] = useState<VisitResponse | null>(null)
-  console.log()
 
   const [specificVisit, setSpecificVisit] = useState<SpecificVisitResponse | null>(null)
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
@@ -290,7 +288,6 @@ export default function DashboardPage() {
   const [visitsPerPage] = useState<number>(10)
 
   const [metricsData, setMetricsData] = useState<AllMetrics | null>(null)
-  // console.log("Metrics Data:", metricsData);
 
   const [revenueData, setRevenueData] = useState<RevenueGrowthData[]>([])
   const [isRevenueLoading, setIsRevenueLoading] = useState(false)
@@ -597,12 +594,12 @@ export default function DashboardPage() {
   }
 
   const handleEditClick = (user: UserData) => {
-    setSelectedUserId(user._id)
+    setSelectedUserId(user?._id)
     setEditUserData({
-      fullname: user.fullname,
-      email: user.email,
+      fullname: user?.fullname,
+      email: user?.email,
       password: "",
-      role: user.role as "admin" | "client" | "staff",
+      role: user?.role as "admin" | "client" | "staff",
     })
     setIsEditDialogOpen(true)
   }
@@ -622,7 +619,7 @@ export default function DashboardPage() {
       }
 
       // Update the user list after successful deletion
-      setUserData(userData.filter((user) => user._id !== selectedUserId))
+      setUserData(userData?.filter((user) => user?._id !== selectedUserId))
       toast.success("User deleted successfully")
     } catch (error) {
       // console.error("Error deleting user:", error)
@@ -649,7 +646,7 @@ export default function DashboardPage() {
       }
 
       // Update the user list with the edited user
-      setUserData(userData.map((user) => (user._id === selectedUserId ? { ...user, ...editUserData } : user)))
+      setUserData(userData?.map((user) => (user?._id === selectedUserId ? { ...user, ...editUserData } : user)))
 
       toast.success("User updated successfully")
     } catch (error) {
@@ -705,7 +702,7 @@ export default function DashboardPage() {
       if (visitsData) {
         setVisitsData({
           ...visitsData,
-          data: visitsData.data.filter((visit) => visit._id !== selectedVisitId),
+          data: visitsData.data.filter((visit) => visit?._id !== selectedVisitId),
         })
       }
       toast.success("Visit deleted successfully")
@@ -719,11 +716,11 @@ export default function DashboardPage() {
 
   // Handle edit visit button click
   const handleEditVisit = (visit: VisitData) => {
-    setSelectedVisitId(visit._id)
+    setSelectedVisitId(visit?._id)
     setEditVisitData({
-      staff: visit.staff?._id || "",
-      type: visit.type || "routine check",
-      notes: visit.notes || "",
+      staff: visit?.staff?._id || "",
+      type: visit?.type || "routine check",
+      notes: visit?.notes || "",
     })
     setIsEditVisitDialogOpen(true)
   }
@@ -773,9 +770,9 @@ export default function DashboardPage() {
   }
 
   const handleOpenStatusModal = (visit: VisitData) => {
-    setSelectedVisitId(visit._id)
+    setSelectedVisitId(visit?._id)
     setStatusForm({
-      status: visit.status,
+      status: visit?.status,
       notes: "",
     })
     setIsStatusModalOpen(true)
@@ -1086,7 +1083,7 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="flex justify-between items-center">
-                  <div className="text-4xl font-bold text-navy-900">{metrics.activeUsers}</div>
+                  <div className="text-4xl font-bold text-navy-900">{metrics?.activeUsers}</div>
                 </div>
               </CardContent>
             </Card>
@@ -1101,7 +1098,7 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="flex justify-between items-center">
-                  <div className="text-4xl font-bold text-navy-900">{metrics.pendingVisits}</div>
+                  <div className="text-4xl font-bold text-navy-900">{metrics?.pendingVisits}</div>
                 </div>
               </CardContent>
             </Card>
@@ -1144,7 +1141,7 @@ export default function DashboardPage() {
                       size="sm"
                       className="flex items-center gap-1"
                       onClick={exportToPDF}
-                      disabled={isRevenueLoading || revenueData.length === 0}
+                      disabled={isRevenueLoading || revenueData?.length === 0}
                     >
                       <FileText className="h-4 w-4" />
                       Export PDF
@@ -1158,8 +1155,8 @@ export default function DashboardPage() {
                       <div className="text-xl font-bold">
                         {isRevenueLoading
                           ? "Loading..."
-                          : revenueData.length > 0
-                            ? `$${revenueData[revenueData.length - 1]?.revenue.toLocaleString()}`
+                          : revenueData?.length > 0
+                            ? `$${revenueData[revenueData?.length - 1]?.revenue.toLocaleString()}`
                             : "$0"}
                       </div>
                     </div>
@@ -1231,7 +1228,7 @@ export default function DashboardPage() {
                       <div>Package</div>
                       {/* <div>Price</div> */}
                     </div>
-                    {recentData?.data.map((activity, index) => (
+                    {recentData?.data?.map((activity, index) => (
                       <div key={index} className="grid grid-cols-2 items-center">
                         <div className="text-sm font-medium">{activity?.user?.fullname}</div>
                         <div className="text-sm">{activity?.plan?.name}</div>
@@ -1291,27 +1288,27 @@ export default function DashboardPage() {
                           <div className="flex-1 min-w-0">
                             <div className="flex justify-between items-start">
                               <div>
-                                <h4 className="font-medium text-sm truncate">{visit.client.fullname}</h4>
-                                <p className="text-xs text-gray-500 mt-1">{visit.address}</p>
+                                <h4 className="font-medium text-sm truncate">{visit?.client?.fullname}</h4>
+                                <p className="text-xs text-gray-500 mt-1">{visit?.address}</p>
                               </div>
-                              <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(visit.status)}`}>
-                                {visit.status}
+                              <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(visit?.status)}`}>
+                                {visit?.status}
                               </span>
                             </div>
                             <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
                               <div className="flex items-center gap-1">
                                 <Calendar className="h-3 w-3" />
-                                {formatDate(visit.date)}
+                                {formatDate(visit?.date)}
                               </div>
                               <div className="flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
-                                {extractTime(visit.date)}
+                                {extractTime(visit?.date)}
                               </div>
                             </div>
                             <div className="flex justify-between items-center mt-2">
                               <div className="text-xs">
-                                {visit.staff ? (
-                                  <span className="text-gray-700">Staff: {visit.staff.fullname}</span>
+                                {visit?.staff ? (
+                                  <span className="text-gray-700">Staff: {visit?.staff?.fullname}</span>
                                 ) : (
                                   <span className="text-gray-400">No staff assigned</span>
                                 )}
@@ -1320,7 +1317,7 @@ export default function DashboardPage() {
                                 variant="ghost"
                                 size="sm"
                                 className="h-7 text-xs"
-                                onClick={() => handleViewVisit(visit._id)}
+                                onClick={() => handleViewVisit(visit?._id)}
                               >
                                 View Details
                               </Button>
@@ -1347,8 +1344,8 @@ export default function DashboardPage() {
                       <div className="flex justify-center items-center py-8">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4F46E5]"></div>
                       </div>
-                    ) : notifications.length > 0 ? (
-                      notifications.map((notification) => (
+                    ) : notifications?.length > 0 ? (
+                      notifications?.map((notification) => (
                         <div key={notification?._id} className="flex justify-between items-start mt-5 text-[14px]">
                           <div className="flex justify-between w-full text-[12px]">
                             <h4 className="text-sm">{notification?.message}</h4>
@@ -1389,7 +1386,7 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="flex justify-between items-center">
-                  <div className="text-4xl font-bold text-navy-900">{metrics.activeUsers}</div>
+                  <div className="text-4xl font-bold text-navy-900">{metrics?.activeUsers}</div>
                 </div>
               </CardContent>
             </Card>
@@ -1403,7 +1400,7 @@ export default function DashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-4xl font-bold text-navy-900">{metrics.totalSecurityStaff}</div>
+                <div className="text-4xl font-bold text-navy-900">{metrics?.totalSecurityStaff}</div>
               </CardContent>
             </Card>
             <Card className="shadow-sm">
@@ -1416,7 +1413,7 @@ export default function DashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-4xl font-bold text-navy-900">{metrics.totalAdmin}</div>
+                <div className="text-4xl font-bold text-navy-900">{metrics?.totalAdmin}</div>
               </CardContent>
             </Card>
           </div>
@@ -1472,25 +1469,25 @@ export default function DashboardPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredUsers.length > 0 ? (
-                      filteredUsers.map((user, index) => (
-                        <TableRow key={user._id}>
+                    {filteredUsers?.length > 0 ? (
+                      filteredUsers?.map((user, index) => (
+                        <TableRow key={user?._id}>
                           <TableCell>{(currentUserPage - 1) * itemsPerPage + index + 1}</TableCell>
-                          <TableCell>{user.fullname}</TableCell>
-                          <TableCell>{user.email}</TableCell>
-                          <TableCell>{user.role}</TableCell>
+                          <TableCell>{user?.fullname}</TableCell>
+                          <TableCell>{user?.email}</TableCell>
+                          <TableCell>{user?.role}</TableCell>
                           <TableCell>
-                            <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(user.status)}`}>
-                              {user.status}
+                            <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(user?.status)}`}>
+                              {user?.status}
                             </span>
                           </TableCell>
-                          <TableCell>{new Date(user.lastActive).toLocaleDateString()}</TableCell>
+                          <TableCell>{new Date(user?.lastActive).toLocaleDateString()}</TableCell>
                           <TableCell>
                             <div className="flex space-x-2">
                               <Button variant="ghost" size="icon" onClick={() => handleEditClick(user)}>
                                 <Edit className="h-4 w-4" />
                               </Button>
-                              <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(user._id)}>
+                              <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(user?._id)}>
                                 <Trash2 className="h-4 w-4" />
                               </Button>
                             </div>
@@ -1644,22 +1641,22 @@ export default function DashboardPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {datas?.data && datas.data.length > 0 ? (
-                    datas.data.map((visit) => (
-                      <TableRow key={visit._id}>
-                        <TableCell>{formatDate(visit.date)}</TableCell>
-                        <TableCell>{extractTime(visit.date)}</TableCell>
-                        <TableCell>{visit.address}</TableCell>
+                  {datas?.data && datas?.data?.length > 0 ? (
+                    datas?.data?.map((visit) => (
+                      <TableRow key={visit?._id}>
+                        <TableCell>{formatDate(visit?.date)}</TableCell>
+                        <TableCell>{extractTime(visit?.date)}</TableCell>
+                        <TableCell>{visit?.address}</TableCell>
                         <TableCell>
                           {visit?.client?.fullname}
                           <div>
                             <span className="text-xs text-gray-500">{visit?.client?.email}</span>
                           </div>
                         </TableCell>
-                        <TableCell>{visit.staff?.fullname || "Not Assigned"}</TableCell>
+                        <TableCell>{visit?.staff?.fullname || "Not Assigned"}</TableCell>
                         <TableCell>
-                          <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(visit.status)}`}>
-                            {visit.status}
+                          <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(visit?.status)}`}>
+                            {visit?.status}
                           </span>
                         </TableCell>
                         <TableCell>
@@ -1674,10 +1671,10 @@ export default function DashboardPage() {
                         </TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
-                            <Button variant="ghost" size="icon" onClick={() => handleDeleteVisit(visit._id)}>
+                            <Button variant="ghost" size="icon" onClick={() => handleDeleteVisit(visit?._id)}>
                               <Trash2 className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="icon" onClick={() => handleViewVisit(visit._id)}>
+                            <Button variant="ghost" size="icon" onClick={() => handleViewVisit(visit?._id)}>
                               <Eye className="h-4 w-4" />
                             </Button>
                           </div>
@@ -1876,51 +1873,51 @@ export default function DashboardPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h4 className="text-sm font-medium mb-1">Client</h4>
-                  <p className="text-sm">{specificVisit.client?.fullname}</p>
+                  <p className="text-sm">{specificVisit?.client?.fullname}</p>
                 </div>
                 <div>
                   <h4 className="text-sm font-medium mb-1">Email</h4>
-                  <p className="text-sm">{specificVisit.client?.email}</p>
+                  <p className="text-sm">{specificVisit?.client?.email}</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h4 className="text-sm font-medium mb-1">Staff</h4>
-                  <p className="text-sm">{specificVisit.staff?.fullname}</p>
+                  <p className="text-sm">{specificVisit?.staff?.fullname}</p>
                 </div>
                 <div>
                   <h4 className="text-sm font-medium mb-1">Date</h4>
-                  <p className="text-sm">{formatDate(specificVisit.date || "")}</p>
+                  <p className="text-sm">{formatDate(specificVisit?.date || "")}</p>
                 </div>
               </div>
 
               <div>
                 <h4 className="text-sm font-medium mb-1">Address</h4>
-                <p className="text-sm">{specificVisit.address}</p>
+                <p className="text-sm">{specificVisit?.address}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h4 className="text-sm font-medium mb-1">Status</h4>
-                  <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(specificVisit.status || "")}`}>
-                    {specificVisit.status}
+                  <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(specificVisit?.status || "")}`}>
+                    {specificVisit?.status}
                   </span>
                 </div>
                 <div>
                   <h4 className="text-sm font-medium mb-1">Payment</h4>
                   <span
-                    className={`px-2 py-1 rounded-full text-xs ${specificVisit.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                    className={`px-2 py-1 rounded-full text-xs ${specificVisit?.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                       }`}
                   >
-                    {specificVisit.isPaid ? "Paid" : "Unpaid"}
+                    {specificVisit?.isPaid ? "Paid" : "Unpaid"}
                   </span>
                 </div>
               </div>
 
               <div>
                 <h4 className="text-sm font-medium mb-1">Notes</h4>
-                <p className="text-sm">{specificVisit.notes || "No notes available"}</p>
+                <p className="text-sm">{specificVisit?.notes || "No notes available"}</p>
               </div>
 
               {specificVisit?.isPaid && (
@@ -1937,40 +1934,40 @@ export default function DashboardPage() {
               {specificVisit.issues && specificVisit.issues.length > 0 && (
                 <div>
                   <h4 className="text-sm font-medium mb-2">Issues</h4>
-                  {specificVisit.issues.map((issue, index) => (
+                  {specificVisit?.issues?.map((issue, index) => (
                     <div key={index} className="mb-3 p-3 border rounded-md">
                       <div className="grid grid-cols-2 gap-2 mb-2">
                         <div>
                           <h5 className="text-xs font-medium">Place</h5>
-                          <p className="text-sm">{issue.place}</p>
+                          <p className="text-sm">{issue?.place}</p>
                         </div>
                         <div>
                           <h5 className="text-xs font-medium">Type</h5>
                           <span
-                            className={`px-2 py-1 rounded-full text-xs ${issue.type === "warning" ? "bg-yellow-100 text-yellow-800" : "bg-red-100 text-red-800"
+                            className={`px-2 py-1 rounded-full text-xs ${issue?.type === "warning" ? "bg-yellow-100 text-yellow-800" : "bg-red-100 text-red-800"
                               }`}
                           >
-                            {issue.type}
+                            {issue?.type}
                           </span>
                         </div>
                       </div>
                       <div className="mb-2">
                         <h5 className="text-xs font-medium">Issue</h5>
-                        <p className="text-sm">{issue.issue}</p>
+                        <p className="text-sm">{issue?.issue}</p>
                       </div>
                       <div className="mb-2">
                         <h5 className="text-xs font-medium">Notes</h5>
-                        <p className="text-sm">{issue.notes}</p>
+                        <p className="text-sm">{issue?.notes}</p>
                       </div>
-                      {issue.media && issue.media.length > 0 && (
+                      {issue?.media && issue?.media?.length > 0 && (
                         <div>
                           <h5 className="text-xs font-medium mb-1">Media</h5>
                           <div className="flex flex-wrap gap-2">
-                            {issue.media.map((media, mediaIndex) => (
+                            {issue?.media?.map((media, mediaIndex) => (
                               <div key={mediaIndex} className="relative">
-                                {media.type === "photo" ? (
+                                {media?.type === "photo" ? (
                                   <Image
-                                    src={media.url || "/placeholder.svg"}
+                                    src={media?.url || "/placeholder.svg"}
                                     alt="Issue media"
                                     className="h-16 w-16 object-cover rounded-md"
                                     width={64}
@@ -1979,7 +1976,7 @@ export default function DashboardPage() {
                                 ) : (
                                   <div className="h-16 w-16 bg-gray-100 flex items-center justify-center rounded-md">
                                     <a
-                                      href={media.url}
+                                      href={media?.url}
                                       target="_blank"
                                       rel="noopener noreferrer"
                                       className="text-blue-600 text-xs"
@@ -2039,16 +2036,16 @@ export default function DashboardPage() {
               <div className="grid gap-2">
                 <Label htmlFor="staff">Staff</Label>
                 <Select
-                  value={editVisitData.staff}
+                  value={editVisitData?.staff}
                   onValueChange={(value) => setEditVisitData({ ...editVisitData, staff: value })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select staff member" />
                   </SelectTrigger>
                   <SelectContent>
-                    {staffMembers.map((staff) => (
-                      <SelectItem key={staff._id} value={staff._id}>
-                        {staff.fullname}
+                    {staffMembers?.map((staff) => (
+                      <SelectItem key={staff?._id} value={staff?._id}>
+                        {staff?.fullname}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -2057,7 +2054,7 @@ export default function DashboardPage() {
               <div className="grid gap-2">
                 <Label htmlFor="type">Visit Type</Label>
                 <Select
-                  value={editVisitData.type}
+                  value={editVisitData?.type}
                   onValueChange={(value) => setEditVisitData({ ...editVisitData, type: value })}
                 >
                   <SelectTrigger>
@@ -2075,7 +2072,7 @@ export default function DashboardPage() {
                 <Label htmlFor="notes">Notes</Label>
                 <Textarea
                   id="notes"
-                  value={editVisitData.notes}
+                  value={editVisitData?.notes}
                   onChange={(e) =>
                     setEditVisitData({
                       ...editVisitData,

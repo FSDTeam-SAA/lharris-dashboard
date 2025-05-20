@@ -4,45 +4,6 @@ import { cookies } from "next/headers";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-console.log("url", API_BASE_URL);
-
-// export async function registerUser(userData: {
-//   fullname: string;
-//   email: string;
-//   password: string;
-//   confirmPassword: string;
-// }) {
-//   try {
-//     const response = await fetch(`${API_BASE_URL}/users/register`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(userData),
-//     });
-
-//     const data = await response.json();
-//     console.log("signup data", data);
-
-//     if (!response.ok) {
-//       return {
-//         success: false,
-//         message: data.message || "Registration failed",
-//       };
-//     }
-
-//     return {
-//       success: true,
-//       data: data.data,
-//     };
-//   } catch (error) {
-//     console.error("Registration error:", error);
-//     return {
-//       success: false,
-//       message: "An error occurred during registration",
-//     };
-//   }
-// }
 
 export async function loginUser(credentials: {
   email: string;
@@ -61,7 +22,6 @@ export async function loginUser(credentials: {
     );
 
     const data = await response.json();
-    // console.log(data, "login data");
 
     if (!response.ok) {
       return {
@@ -114,7 +74,6 @@ export async function verifyCode(code: string) {
     });
 
     const data = await response.json();
-    console.log(data, "verify data");
 
     if (!response.ok) {
       return {

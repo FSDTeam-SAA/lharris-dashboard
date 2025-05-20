@@ -69,14 +69,14 @@ export function DashboardCalendar() {
           <div className="text-xs font-medium text-muted-foreground">Fri</div>
           <div className="text-xs font-medium text-muted-foreground">Sat</div>
 
-          {calendarDays.map((day, i) => {
+          {calendarDays?.map((day, i) => {
             const className = `
               h-10 flex items-center justify-center rounded-md text-sm cursor-pointer
-              ${!day.isCurrentMonth ? "text-muted-foreground" : ""}
-              ${day.isToday ? "bg-primary/20 font-bold" : ""}
-              ${day.hasEvent ? "bg-green-100" : ""}
-              ${day.isScheduled ? "bg-blue-100" : ""}
-              ${day.isCancelled ? "bg-red-100" : ""}
+              ${!day?.isCurrentMonth ? "text-muted-foreground" : ""}
+              ${day?.isToday ? "bg-primary/20 font-bold" : ""}
+              ${day?.hasEvent ? "bg-green-100" : ""}
+              ${day?.isScheduled ? "bg-blue-100" : ""}
+              ${day?.isCancelled ? "bg-red-100" : ""}
             `
 
             return (
@@ -84,12 +84,12 @@ export function DashboardCalendar() {
                 key={i}
                 className={className}
                 onClick={() => {
-                  if (day.isCurrentMonth) {
-                    toast.info(`Selected date: March ${day.day}, 2025`)
+                  if (day?.isCurrentMonth) {
+                    toast.info(`Selected date: March ${day?.day}, 2025`)
                   }
                 }}
               >
-                {day.day}
+                {day?.day}
               </div>
             )
           })}
