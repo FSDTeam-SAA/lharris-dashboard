@@ -593,9 +593,9 @@ export default function DashboardPage() {
     if (normalizedStatus.includes("inactive")) return "bg-red-100 text-red-800"
     if (normalizedStatus.includes("scheduled")) return "bg-blue-100 text-blue-800"
     if (normalizedStatus.includes("progress")) return "bg-yellow-100 text-yellow-800"
-    if (normalizedStatus.includes("complete")) return "bg-green-100 text-green-800"
+    if (normalizedStatus.includes("completed")) return "bg-green-100 text-green-800"
     if (normalizedStatus.includes("cancelled")) return "bg-red-100 text-red-800"
-    if (normalizedStatus.includes("confirm")) return "bg-green-100 text-green-800"
+    if (normalizedStatus.includes("confirmed")) return "bg-green-100 text-green-800"
     if (normalizedStatus.includes("pending")) return "bg-yellow-100 text-yellow-800"
 
     return "bg-gray-100 text-gray-800"
