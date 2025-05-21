@@ -32,6 +32,19 @@ interface Visit {
   address?: string
   notes?: string
   visitId?: string
+  userPlan?: {
+    _id: string
+    addOnServices: [
+      {
+        _id: string,
+        name: string
+      }
+    ]
+    plan: {
+      _id: string
+      name: string
+    }
+  }
 }
 
 interface Staff {
@@ -308,6 +321,7 @@ export function VisitPage() {
             address: visit?.address || "",
             notes: visit?.notes || "",
             visitId: visit?.visitId || "",
+            userPlan: visit?.userPlan || ""
           })),
         )
 
@@ -697,6 +711,8 @@ export function VisitPage() {
     setIsNavigating(false)
   }, [])
 
+  console.log(currentVisit)
+
 
   return (
     <div
@@ -779,7 +795,7 @@ export function VisitPage() {
                           minute: "2-digit",
                         })}
                       </TableCell>
-                      <TableCell>{visit?.type}</TableCell>
+                      <TableCell className="capitalize">{visit?.type}</TableCell>
                       <TableCell>
                         <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(visit?.status)}`}>
                           {visit?.status}
@@ -1072,7 +1088,7 @@ export function VisitPage() {
               </div>
               <div className="grid grid-cols-[100px_1fr] gap-2">
                 <span className="text-sm font-medium">Visit Type:</span>
-                <span className="text-sm">{currentVisit.type}</span>
+                <span className="text-sm capitalize">{currentVisit.type}</span>
               </div>
               <div className="grid grid-cols-[100px_1fr] gap-2">
                 <span className="text-sm font-medium">Status:</span>
@@ -1086,16 +1102,20 @@ export function VisitPage() {
                 <span className="text-sm font-medium">Notes:</span>
                 <span className="text-sm">{currentVisit.notes || "No notes available"}</span>
               </div>
-              {/* {currentVisit?.isPaid && (
-                <div>
-                  <h4 className="text-sm font-medium mb-1">Ad-on Services: </h4>
-                  <ul className="text-sm">
-                    {currentVisit?.userPlan?.addOnServices?.map((service: string, index: number) => (
-                      <li key={index}>{service}</li>
-                    ))}
-                  </ul>
-                </div>
-              )} */}
+
+              <div className="grid grid-cols-[100px_1fr] gap-2">
+                <span className="text-sm font-medium">Plan:</span>
+                <span className="text-sm">{currentVisit?.userPlan?.plan?.name}</span>
+              </div>
+
+              <div className="pt-4">
+                <h4 className="text-base font-medium mb-1">Ad-on Services: </h4>
+                <ul className="text-sm list-inside list-disc">
+                  {currentVisit?.userPlan?.addOnServices?.map((service: any, index: number) => (
+                    <li key={index}>{service.name}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
           <DialogFooter className="sm:justify-center">

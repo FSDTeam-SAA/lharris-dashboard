@@ -76,6 +76,8 @@ export function MediaViewerDialog({
     onOpenChange(false);
   };
 
+  console.log(media)
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-auto">
@@ -183,7 +185,7 @@ export function MediaViewerDialog({
               {/* Visit Type Row */}
               <div className="flex justify-between items-center">
                 <span className="font-medium">Visit Type:</span>
-                <span className="capitalize">{media.visitType || "N/A"}</span>
+                <span className="capitalize">{media.type || "N/A"}</span>
               </div>
 
               {/* Issue Row with Button */}

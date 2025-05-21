@@ -111,7 +111,16 @@ interface SpecificVisitResponse {
   }
   userPlan?: {
     _id: string
-    addOnServices: string[]
+    addOnServices: [
+      {
+        _id: string,
+        name: string
+      }
+    ]
+    plan: {
+      _id: string
+      name: string
+    }
   }
   address?: string
   date?: string
@@ -318,6 +327,10 @@ export default function DashboardPage() {
     },
     [setVisitSearchTerm, setCurrentVisitPage],
   ) as (value: string) => void
+
+
+  console.log(session?.data?.accessToken)
+
 
   // Fetch metrics data from API
   useEffect(() => {
@@ -1892,44 +1905,40 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <div>
-                <h4 className="text-sm font-medium mb-1">Address</h4>
-                <p className="text-sm">{specificVisit?.address}</p>
-              </div>
+
 
               <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="text-sm font-medium mb-1">Address</h4>
+                  <p className="text-sm">{specificVisit?.address}</p>
+                </div>
                 <div>
                   <h4 className="text-sm font-medium mb-1">Status</h4>
                   <span className={`px-2 py-1 rounded-full text-xs ${getStatusClass(specificVisit?.status || "")}`}>
                     {specificVisit?.status}
                   </span>
                 </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h4 className="text-sm font-medium mb-1">Payment</h4>
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs ${specificVisit?.isPaid ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                      }`}
-                  >
-                    {specificVisit?.isPaid ? "Paid" : "Unpaid"}
-                  </span>
+                  <h4 className="text-sm font-medium mb-1">Notes</h4>
+                  <p className="text-sm">{specificVisit?.notes || "No notes available"}</p>
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium mb-1">Plan</h4>
+                  <p className="text-sm">{specificVisit?.userPlan?.plan?.name || "No notes available"}</p>
                 </div>
               </div>
 
               <div>
-                <h4 className="text-sm font-medium mb-1">Notes</h4>
-                <p className="text-sm">{specificVisit?.notes || "No notes available"}</p>
+                <h4 className="text-base font-medium mb-1">Ad-on Services: </h4>
+                <ul className="text-sm list-inside list-disc">
+                  {specificVisit?.userPlan?.addOnServices?.map((service) => (
+                    <li key={service._id}>{service.name}</li>
+                  ))}
+                </ul>
               </div>
-
-              {specificVisit?.isPaid && (
-                <div>
-                  <h4 className="text-sm font-medium mb-1">Ad-on Services: </h4>
-                  <ul className="text-sm">
-                    {specificVisit?.userPlan?.addOnServices?.map((service: string, index: number) => (
-                      <li key={index}>{service}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
 
               {specificVisit.issues && specificVisit.issues.length > 0 && (
                 <div>
