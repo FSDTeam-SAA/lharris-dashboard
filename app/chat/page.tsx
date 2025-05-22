@@ -116,7 +116,7 @@ export default function AdminChatPage() {
   }
 
   return (
-    <div className="flex h-[93vh]">
+    <div className="flex h-[100vh] overflow-hidden">
       <div className="w-80 flex-shrink-0">
         <div className="h-16 border-b flex items-center px-4">
           <h1 className="font-semibold">All Messages</h1>
@@ -146,7 +146,7 @@ export default function AdminChatPage() {
                 </div>
               </div>
             </div>
-            <div className="flex-1 overflow-hidden flex flex-col">
+            <div className="flex flex-col overflow-hidden">
               <div className="flex-1 overflow-y-auto">
                 <MessageList messages={messages} isLoading={isLoading} />
               </div>

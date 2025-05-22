@@ -198,29 +198,31 @@ export function AddonServices() {
             ) : addonServices.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {addonServices?.map((addon) => (
-                        <Card key={addon?._id}>
-                            <CardHeader className="pb-2">
-                                <CardTitle className="flex justify-between">
-                                    <span className="capitalize text-2xl py-2">{addon?.name || addon?.addOn || "Add-on Service"}</span>
-                                </CardTitle>
-                                <CardDescription className="text-sm py-2 font-medium text-[#000000] capitalize">
-                                    <div className="flex justify-between">
-                                        <div className="">
-                                            <p> Flexible Price: ${addon?.flexiblePrice}</p>
-                                            <p> Tiered Price: ${addon?.tieredPrice}</p>
+                        <Card key={addon?._id} className="flex flex-col justify-between">
+                            <div className="">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="flex justify-between">
+                                        <span className="capitalize text-2xl py-2">{addon?.name || addon?.addOn || "Add-on Service"}</span>
+                                    </CardTitle>
+                                    <CardDescription className="text-sm py-2 font-medium text-[#000000] capitalize">
+                                        <div className="flex justify-between">
+                                            <div className="">
+                                                <p> Flexible Price: ${addon?.flexiblePrice}</p>
+                                                <p> Tiered Price: ${addon?.tieredPrice}</p>
+                                            </div>
+                                            <div className="">
+                                                Pack: {addon?.pack}
+                                            </div>
                                         </div>
-                                        <div className="">
-                                            Pack: {addon?.pack}
-                                        </div>
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent className="pb-2">
+                                    <div className="">
+                                        <h3>Details: </h3>
                                     </div>
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="pb-2">
-                                <div className="">
-                                    <h3>Details: </h3>
-                                </div>
-                                <div className="mt-2">{addon?.description || "No description available"}</div>
-                            </CardContent>
+                                    <div className="mt-2">{addon?.description || "No description available"}</div>
+                                </CardContent>
+                            </div>
                             <CardFooter className="flex items-center gap-2 text-base">
                                 <Button size="sm" onClick={() => handleEditClick(addon)} className="bg-[#091057] text-[#F7E39F]">
                                     Edit

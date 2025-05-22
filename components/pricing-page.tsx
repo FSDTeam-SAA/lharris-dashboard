@@ -404,35 +404,6 @@ export function PricingPage() {
                             Delete
                           </Button>
                         </div>
-                        <div
-                          className="list-item list-none pb-10 h-[200px] "
-                          dangerouslySetInnerHTML={{
-                            __html: plan?.description || "Plan Description",
-                          }}
-                        />
-                      </CardFooter>
-                      <CardFooter className="flex items-center gap-2 text-base absolute bottom-0">
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            setIsEditPackageOpen(true)
-                            setSelectedPlanId(plan?._id)
-                            handleEditClick(plan)
-                          }}
-                          className="bg-[#091057] text-[#F7E39F]"
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            setIsDeletePackageOpen(true)
-                            setSelectedPlanId(plan?._id)
-                          }}
-                          className="hover:bg-[#1a2182] bg-transparent border border-[#091057] text-[#091057] hover:text-[#F7E39F]"
-                        >
-                          Delete
-                        </Button>
                       </CardFooter>
                     </Card>
                   ))
